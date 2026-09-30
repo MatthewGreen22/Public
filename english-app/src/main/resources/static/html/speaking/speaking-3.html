@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Учебная страница по устной части</title>
+    <style>
+      ::selection {
+        background: #aeaeae;
+        color: #ffffff;
+      }
+      body {
+        -webkit-tap-highlight-color: rgba(17, 17, 17, 0.3);
+        font-family: "Poppins", sans-serif;
+        line-height: 1.5;
+        font-weight: 700;
+        margin: 15px;
+        background-color: #111111;
+        color: #ffffff;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      p {
+        margin-bottom: 10px;
+        color: #aeaeae;
+      }
+      strong {
+        font-weight: 800;
+      }
+      span {
+        line-height: 1.9;
+      }
+      button {
+        font-family: "Poppins", sans-serif;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #ff8000;
+        border-radius: 5px;
+        border: 0;
+        height: 35px;
+        width: 170px;
+        margin-top: 15px;
+        transition: all 150ms;
+      }
+      button:active {
+        opacity: 0.3;
+      }
+      button.clicked {
+        background-color: #363636;
+        color: #4e5053;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container img {
+        max-width: 100%;
+        cursor: pointer;
+      }
+      .modal {
+        justify-content: center;
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        overflow: auto;
+      }
+      .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 80%;
+      }
+      .highlight {
+        background-color: #ff8000;
+        color: #ffffff;
+        padding-right: 25px;
+        padding-left: 25px;
+        border-radius: 5px;
+      }
+      /*эти стили для подчеркивания*/
+      .input-line {
+        background-color: #111111;
+        padding-right: 75px;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .one-line {
+        border-bottom: 1px solid #ff8000;
+      }
+      .two-line {
+        position: relative;
+        border-bottom: 3px double #ff8000;
+      }
+      /*эти стили для подчеркивания*/
+      .training-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .training-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #333333;
+        margin: auto;
+        border-radius: 20px;
+        padding: 10px;
+        max-width: 90%;
+      }
+      .check-answer {
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+      .input {
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        margin-bottom: 1px;
+        font-weight: 700;
+        font-size: 16px;
+        width: 70px;
+        border: none;
+        outline: none;
+        color: #aeaeae;
+        background-color: #333333;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .input.correct {
+        border-color: green;
+      }
+      .input.incorrect {
+        border-color: red;
+      }
+      .tooltip-text {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        color: #ff8000;
+        cursor: pointer;
+        transition: all 150ms;
+      }
+      .hint-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .hint-content {
+        background-color: #333333;
+        color: #ffffff;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        max-height: 50%;
+        overflow-y: auto;
+        text-align: left;
+      }
+      .hint-content p {
+        margin-bottom: 16px;
+      }
+      .hint-content strong {
+        color: #ffffff;
+      }
+      .question-mark {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        transition: all 200ms;
+        right: 15px;
+        margin-top: 15px;
+        filter: drop-shadow(0 0 0.3rem #ff8000);
+      }
+      .question-mark:active {
+        filter: drop-shadow(0 0 0.5rem #ff8000);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      Задание 3 <br />
+      Алгоритм работы
+    </h1>
+
+    <p>
+      Обрати внимание, что это задание воспринимается полностью на слух, перед
+      тобой не будет транскрипта
+      <br />
+      <br />
+      Время ответа на каждый вопрос – 40 секунд
+      <br />
+      <br />
+      1. Пока интервьюер говорит, тебе нужно уловить основную тему интервью
+      <br />
+      <br />
+      2. Вспомнить основную лексику по этой теме
+      <br />
+      <br />
+      3. Если вопрос про что-то самое лучшее/любимое/известное следуй схеме
+      ответа
+      <br />
+      <br />
+      a. <strong>Вводная фраза</strong> Actually there are a lot of exciting
+      Russian writers…/You know, there are a lot of…/If you ask me, there are a
+      lot of famous sportsmen…
+      <br />
+      <br />
+      b. <strong>Пример</strong> For instance Dostoevsky/Yashin/Gogol/Kharlamov
+      <br />
+      <br />
+      c. <strong>Самый лучший/любимый/интересный</strong> … But my favourite
+      Russian sportsman is Lev Yashin/But most of all I like a park in my
+      hometown
+      <br />
+      <br />
+      4. Ответить минимум двумя предложениями на вопрос
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19ov.svg"
+        alt="question-mark"
+        class="question-mark"
+        data-hint="hint-1"
+      />
+    </div>
+
+    <p>
+      Например:
+      <br />
+      <br />
+      <span class="tooltip-text">Interviewer:</span> Hello everybody! It’s Teenagers Round the World Channel.
+      Our guest today is a teenager from Russia and we are going to discuss
+      teenagers’ attitude to local places of interest. We’d like to know our
+      guest’s point of view on this issue. Please answer five questions. So,
+      let’s get started.
+      <br />
+      <br />
+      <span class="tooltip-text">Interviewer:</span> What are some of the places of interest in your region? Why
+      should a tourist see them?
+      <br />
+      <br />
+      <span class="tooltip-text">Student:</span> <span class="one-line">Actually, there are many</span> places of interest in my region,
+      <span class="one-line">for instance</span>, a giant metallurgical plant, resorts in the Ural
+      Mountains and thermal springs. <span class="one-line">Tourists should see them because tourists
+      will get an unforgettable experience and beautiful photos</span>.
+      <br />
+      <br />
+      <span class="one-line">Interviewer:</span> Is it important to preserve historical places? Why or why
+      not?
+      <br />
+      <br />
+      <span class="tooltip-text">Student:</span> <span class="one-line">I’m sure it’s important to</span> preserve historical places
+      because <span class="one-line">people should be connected with their roots. Moreover,
+      historical places are vital for our culture</span>.
+      <br />
+      <br />
+      <span class="tooltip-text">Interviewer:</span> What is your favourite place in your home town? Why do you
+      like it?
+      <br />
+      <br />
+      <span class="tooltip-text">Student:</span> <span class="one-line">As for me, my favourite place in my home town is</span> one
+      district with wonderful old architecture. <span class="one-line">I like it because</span> I grew up
+      in the district and got really interested in architecture.
+      <br />
+      <br />
+      <span class="tooltip-text">Interviewer:</span> What sort of places will be interesting for people in the
+      future? Why do you think so?
+      <br />
+      <br />
+      <span class="tooltip-text">Student:</span> <span class="one-line">I think</span>, people will be interested in history at any
+      time. They will find our flats and houses both familiar and weird as we
+      find some houses of the 15th century.
+      <br />
+      <br />
+      <span class="tooltip-text">Interviewer:</span> How can we make teenagers be more interested in local
+      culture?
+      <br />
+      <br />
+      <span class="tooltip-text">Student:</span> <span class="one-line">In my opinion</span>, local culture should be shown to teenagers
+      in a fascinating and entertaining way. <span class="one-line">For instance</span>, videogames and
+      excursions in virtual reality will <span class="one-line">be definitely interesting for</span> them.
+      <br />
+      <br />
+      <span class="tooltip-text">Interviewer:</span> Thank you very much for your interview.
+    </p>
+
+    <div class="hint-modal" id="hint-1" onclick="closeHint('hint-1')">
+      <div class="hint-content">
+        <p>
+          В этом задании часто спрашивают про следующие темы. Заведи тетрадку,
+          заметки, карточки с тремя примерами на каждую тему:
+          <br />
+          <br />
+          Русские спортсмены
+          <br />
+          <br />
+          Русские писатели
+          <br />
+          <br />
+          Русские деятели культуры
+          <br />
+          <br />
+          Русские актёры
+          <br />
+          <br />
+          Достопримечательности Москвы, Санкт-Петербурга, а также родного края
+        </p>
+      </div>
+    </div>
+
+    <div id="modal" class="modal" onclick="closeModal()">
+      <img src="" id="modal-image" class="modal-content" alt="modal content" />
+    </div>
+
+    <script>
+      function openTest(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+      }
+
+      function closeTest(modal) {
+        modal.style.display = "none";
+      }
+
+      document.querySelectorAll(".open-test").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          openTest(modalId);
+        };
+      });
+
+      function saveButtonStates() {
+        const states = [];
+        document.querySelectorAll(".open-test").forEach((button) => {
+          if (button.classList.contains("clicked")) {
+            states.push(button.id);
+          }
+        });
+        localStorage.setItem("clickedButtons", JSON.stringify(states));
+      }
+
+      function restoreButtonStates() {
+        const savedStates =
+          JSON.parse(localStorage.getItem("clickedButtons")) || [];
+        savedStates.forEach((buttonId) => {
+          const button = document.getElementById(buttonId);
+          if (button) {
+            button.classList.add("clicked");
+          }
+        });
+      }
+
+      document.querySelectorAll(".check-answer").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          const answers = {
+            "modal-2": ["FIRST", "TWENTIETH"],
+          };
+
+          const correctAnswers = answers[modalId];
+          const inputs = document.querySelectorAll(`#${modalId} .input`);
+
+          inputs.forEach((input, index) => {
+            if (input.value.trim().toUpperCase() !== correctAnswers[index]) {
+              input.classList.add("incorrect");
+              input.classList.remove("correct");
+            } else {
+              input.classList.add("correct");
+              input.classList.remove("incorrect");
+            }
+          });
+
+          const openButton = document.querySelector(
+            `.open-test[data-modal="${modalId}"]`,
+          );
+          openButton.classList.add("clicked");
+          saveButtonStates();
+        };
+      });
+
+      window.onclick = function (event) {
+        if (event.target.classList.contains("training-modal")) {
+          closeTest(event.target);
+        }
+      };
+
+      function openModal(imageElement) {
+        let modal = document.getElementById("modal");
+        let modalImg = document.getElementById("modal-image");
+
+        modal.style.display = "flex";
+        modalImg.src = imageElement.src;
+      }
+
+      function closeModal() {
+        let modal = document.getElementById("modal");
+        modal.style.display = "none";
+      }
+
+      function openHint(hintId) {
+        document.getElementById(hintId).style.display = "flex";
+      }
+
+      function closeHint(hintId) {
+        document.getElementById(hintId).style.display = "none";
+      }
+
+      document.querySelectorAll(".tooltip-text").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      document.querySelectorAll(".question-mark").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      window.onload = restoreButtonStates;
+    </script>
+  </body>
+</html>

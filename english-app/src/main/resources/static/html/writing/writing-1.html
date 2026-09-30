@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Учебная страница по аудированию</title>
+    <style>
+      ::selection {
+        background: #aeaeae;
+        color: #ffffff;
+      }
+      body {
+        -webkit-tap-highlight-color: rgba(17, 17, 17, 0.3);
+        font-family: "Poppins", sans-serif;
+        line-height: 1.5;
+        font-weight: 700;
+        margin: 15px;
+        background-color: #111111;
+        color: #ffffff;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      p {
+        margin-bottom: 10px;
+        color: #aeaeae;
+      }
+      strong {
+        font-weight: 800;
+      }
+      span {
+        line-height: 1.9;
+      }
+      button {
+        font-family: "Poppins", sans-serif;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #ff8000;
+        border-radius: 5px;
+        border: 0;
+        height: 35px;
+        width: 170px;
+        margin-top: 15px;
+        transition: all 150ms;
+      }
+      button:active {
+        opacity: 0.3;
+      }
+      button.clicked {
+        background-color: #363636;
+        color: #4e5053;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container img {
+        max-width: 100%;
+        cursor: pointer;
+      }
+      .modal {
+        justify-content: center;
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        overflow: auto;
+      }
+      .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 80%;
+      }
+      .highlight {
+        background-color: #ff8000;
+        color: #ffffff;
+        padding-right: 25px;
+        padding-left: 25px;
+        border-radius: 5px;
+      }
+      /*эти стили для подчеркивания*/
+      .input-line {
+        background-color: #111111;
+        padding-right: 75px;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .one-line {
+        border-bottom: 1px solid #ff8000;
+      }
+      .two-line {
+        position: relative;
+        border-bottom: 3px double #ff8000;
+      }
+      /*эти стили для подчеркивания*/
+      .training-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .training-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #333333;
+        margin: auto;
+        border-radius: 20px;
+        padding: 10px;
+        max-width: 90%;
+      }
+      .check-answer {
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+      .input {
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        margin-bottom: 1px;
+        font-weight: 700;
+        font-size: 16px;
+        width: 70px;
+        border: none;
+        outline: none;
+        color: #aeaeae;
+        background-color: #333333;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .input.correct {
+        border-color: green;
+      }
+      .input.incorrect {
+        border-color: red;
+      }
+      .tooltip-text {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        color: #ff8000;
+        cursor: pointer;
+        transition: all 150ms;
+      }
+      .tooltip-text:active {
+        color: rgba(255, 128, 0, 0.31);
+      }
+      .hint-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .hint-content {
+        background-color: #333333;
+        color: #ffffff;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        max-height: 50%;
+        overflow-y: auto;
+        text-align: left;
+      }
+      .hint-content p {
+        margin-bottom: 16px;
+      }
+      .hint-content strong {
+        color: #ffffff;
+      }
+      .question-mark {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        transition: all 200ms;
+        right: 15px;
+        margin-top: 15px;
+        filter: drop-shadow(0 0 0.3rem #ff8000);
+      }
+      .question-mark:active {
+        filter: drop-shadow(0 0 0.5rem #ff8000);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- главный заголовок -->
+    <h1>
+      Задание 37 <br />
+      Алгоритм работы
+    </h1>
+
+    <p>
+      Рекомендуем писать письмо сразу «на чистовик»
+      <br />
+      <br />
+      Тебе нужно написать email другу по переписке. Начнем со схемы ответа
+    </p>
+    <p>
+      1. <strong>Обращение</strong> (слева, на отдельной строке), например, Dear
+      Jim/Alice, Hello/ Hi Jim/Alice;
+      <br />
+      <br />
+      2. <strong>Благодарность</strong> за полученное письмо и\или выражение
+      положительных эмоций от его получения, «Thank you for your recent message.
+      », «Thanks for writing to me. I’m always glad to get your emails./ I
+      always like to read your emails. /I enjoy reading your messages and
+      writing to you.» и т.д;
+      <br />
+      <br />
+      3. <strong>Ответы на три вопроса</strong> друга по переписке (основная
+      часть письма). Для того чтобы письмо было логичным, можно использовать
+      фразы: «You asked me about … » или «As you are interested in … I’d like to
+      tell you that …» и т. п.;However,…./ Anyway,…/ As for me,…/
+      <br />
+      <br />
+      4. <strong>Три вопроса</strong> другу по переписке на тему, указанную в
+      задании, при этом не забываем про соединительную фразу/предложение, чтобы
+      вопросы были логично связаны с предыдущим текстом; By the way, you
+      mentioned…/Great news about your...! How...?/What...?
+      <br />
+      <br />
+      5. <strong>Упоминание о дальнейших контактах</strong>, например, «Write
+      back soon»; «Hope to hear from you soon»; «Please, write to me soon» и т.
+      д. (можно писать на отдельной строке);
+      <br />
+      <br />
+      6. <strong>Завершающая фраза</strong>, например, «Best wishes»; «All the
+      best»; «With love»; «Yours» (на отдельной строке);
+      <br />
+      <br />
+      7.
+      <strong>Подпись автора <span class="one-line">без точки</span></strong>
+      (только Ваше имя, на отдельной строке).
+    </p>
+
+    <h2>Клише для email</h2>
+    <p>
+      1.
+      <strong
+        >Обращение на отдельной строчке. Обязательно нужна запятая после
+        имени:</strong
+      >
+      <br />
+      <br />
+      Dear John,
+      <br />
+      Dear Poly,
+      <br />
+      Dear Amy,
+    </p>
+    <p>
+      2.
+      <strong>Первая часть письма благодарность за полученное письмо:</strong>
+      <br />
+      <br />
+      Thanks for your letter.
+      <br />
+      Thanks for your message.
+      <br />
+      It was so great to get an email.
+      <br />
+      It was great to get your letter…
+      <br />
+      It was great/lovely to hear from you.
+      <br />
+      Thanks for your long letter.
+      <br />
+      It was really great to hear all your news, after not hearing from you for
+      ages…
+    </p>
+    <p>
+      <strong>Извиняемся, что не могли ответить раньше:</strong>
+      <br />
+      <br />
+      Sorry I haven't written for so long but…
+      <br />
+      I'm very sorry about not replying to your letter sooner but I've been
+      extremely busy.
+      <br />
+      Sorry for not writing earlier but I've…
+      <br />
+      How are things with you?
+      <br />
+      I'm sorry I haven't written for so long, but… I was really pleased to hear
+      that…
+      <br />
+      I thought I'd better write and tell you about…
+    </p>
+    <p>
+      3.
+      <strong
+        >Вторая часть письма Main body (тело письма), где мы отвечаем на три
+        вопроса нашего друга/подруги. Это самая большая часть письма.
+      </strong>
+      <br />
+      <br />
+      Переход к ответам на вопросы:
+      <br />
+      In your letter you asked me about…
+      <br />
+      Let me answer your questions.
+      <br />
+      In your letter you asked me several questions.
+      <br />
+      Now it’s time to answer your questions.
+      <br />
+      Now I’d like to answer your questions.
+    </p>
+    <p>
+      <strong
+        >При ответах на вопросы не забываем использовать вводные
+        конструкции:</strong
+      >
+      <br />
+      <br />
+      Personally, I…
+      <br />
+      In my opinion,…
+      <br />
+      In my view, …
+      <br />
+      As for, …
+      <br />
+      For example, …
+      <br />
+      Besides, …
+      <br />
+      By the way,…
+      <br />
+      Actually, …
+      <br />
+      However, …
+      <br />
+      So, …
+      <br />
+      Well, …
+      <br />
+      You know, …
+      <br />
+      As for me, …
+    </p>
+    <p>
+      4.
+      <strong
+        >Третья часть письма: Вопросы. Теперь твоя очередь задавать вопросы
+        нашему другу по переписке на заданную тему.</strong
+      >
+      <br />
+      <br />
+      Now I’d like to ask you some questions about...
+      <br />
+      In your email you mentioned…
+      <br />
+      By the way, what about your…
+      <br />
+      As for your news, I’d like to ask you some questions about…
+    </p>
+    <p>
+      5. <strong>Завершение письма. Надежда на будущий контакт.</strong>
+      <br />
+      <br />
+      Write back soon.
+      <br />
+      Drop me a line when you can.
+      <br />
+      Keep in touch, I’m waiting your answer.
+      <br />
+      Hope to get your letter soon.
+    </p>
+    <p>
+      6. <strong>Завершение письма. Завершающая фраза с запятой.</strong>
+      <br />
+      <br />
+      With love,
+      <br />
+      Love,
+      <br />
+      Best wishes,
+      <br />
+      Yours,
+      <br />
+      All the best,
+    </p>
+    <p>
+      7. <strong>Подпись, имя без точки.</strong>
+      <br />
+      <br />
+      Sasha
+      <br />
+      Masha
+      <br />
+      Ilya
+    </p>
+
+    <h2>Разберем пример</h2>
+    <p>
+      37. You have received an email message from your English-speaking
+      pen-friend
+      <br />
+      <br />
+      Ronny:
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/1AFQ.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <p>
+      Write an email to Ronny.
+      <br />
+      <br />
+      In your message:
+      <br />
+      <br />
+      -answer his questions;
+      <br />
+      <br />
+      ask <strong>3 questions</strong> about his uncle.
+      <br />
+      <br />
+      Write <strong>100-140 words.</strong>
+      <br />
+      <br />
+      Remember the rules of email writing.
+    </p>
+    <p>
+      <strong>От тебя требуется</strong> написать электронное письмо другу, в
+      этом случае Ронни. Также полно и точно ответить на 3 заданных вопроса и
+      задать 3 вопроса по конкретной теме, в этом случае про его дядю.
+      <br />
+      <br />
+      <strong>Количество слов:</strong> 100 – 140, но допускается отклонение в
+      10% от указанных границ поэтому 90-154 слова. Если Вы пишете меньше 90
+      слов, то письмо проверяться не будет. Если Вы пишете больше 154 слов, то
+      эксперт будет проверять первые 140 слов.
+      <br />
+      <br />
+      Начнем писать пример по плану:
+    </p>
+    <p>
+      1.
+      <strong
+        >Обращение на отдельной строчке. Обязательно нужна запятая после
+        имени:</strong
+      >
+      <br />
+      <br />
+      Dear Ronny,
+    </p>
+    <p>
+      2.
+      <strong
+        >Первая часть письма благодарность за полученное письмо + Извинения за
+        то, что не могли ответить раньше:</strong
+      >
+      <br />
+      <br />
+      Thank you for the e-mail! I am glad to hear from you. I'm sorry I couldn't
+      answer earlier because I was busy with my exams.
+    </p>
+    <p>
+      3.
+      <strong
+        >Вторая часть письма Main body (тело письма), где мы отвечаем на три
+        вопроса нашего друга/подруги.</strong
+      >
+      <br />
+      <br />
+      •
+      <strong>В первом предложении нужно упомянуть, о чем нас спросили</strong>
+      <br />
+      <br />
+      In your message you asked me about summer.
+      <br />
+      <br />
+      •
+      <strong
+        >Ответить на заданные вопросы. Ронни спросил про погоду летом в России,
+        твое любимое время года и почему оно любимое и третий вопрос про твои
+        планы на это лето. На каждый вопрос ответь одним распространенным
+        предложением или двумя маленькими. Не забывай про
+        <span class="one-line">слова связки и вводные конструкции</span>.
+      </strong>
+      <br />
+      <br />
+      <span class="one-line">You know</span>, the weather here is varied in this
+      season. It can be rather hot in the south of the country and cool in the
+      north. <span class="one-line">As for me</span>, I prefer summer, this is
+      the season when we have vacations. This summer I am planning to go the
+      summer camp, then my parents are going to take me to the country.
+    </p>
+    <p>
+      4.
+      <strong
+        >Третья часть письма: Теперь твоя очередь задавать вопросы нашему другу
+        по переписке на заданную тему. Нужно задать 3 вопроса про дядю Ронни.
+      </strong>
+      <br />
+      <br />
+      By the way, I'd like to know more about your uncle. Where does your uncle
+      live? Has he got a family? How long is he going to stay with you?
+    </p>
+    <p>
+      5. <strong>Завершение письма. Надежда на будущий контакт.</strong>
+      <br />
+      <br />
+      I've got to go now, as I've got lots of homework to do. Keep in touch!
+    </p>
+    <p>
+      6. <strong>Завершающая фраза с запятой.</strong>
+      <br />
+      <br />
+      Yours,
+    </p>
+    <p>
+      7. <strong>Подпись, имя без точки.</strong>
+      <br />
+      <br />
+      Sasha
+    </p>
+    <p>
+      В итоге у нас получилось письмо, подчеркнутые слова – это клише, которые
+      нужно просто заучить. Тебе нужно будет придумывать только неподчеркнутые
+      части.
+      <br />
+      <br />
+      <span class="one-line">Dear Ronny,</span>
+      <br />
+      <br />
+      <span class="one-line"
+        >Thank you for the e-mail! I am glad to hear from you. I'm sorry I
+        couldn't answer earlier because I was busy with my exams.</span
+      >
+      <br />
+      <br />
+      <span class="one-line">In your message you asked me about</span> summer.
+      <span class="one-line">You know,</span> the weather here is varied in this
+      season. It can be rather hot in the south of the country and cool in the
+      north. <span class="one-line">As for me,</span> I prefer summer, this is
+      the season when we have vacations. This summer I am planning to go the
+      summer camp, then my parents are going to take me to the country.
+      <br />
+      <br />
+      <span class="one-line">By the way, I'd like to know more about</span> your
+      uncle. Where does your uncle live? What does he look like? How old is he?
+      <br />
+      <br />
+      <span class="one-line"
+        >I've got to go now, as I've got lots of homework to do.</span
+      >
+      <br />
+      <br />
+      <span class="one-line">Keep in touch!</span>
+      <br />
+      <br />
+      <span class="one-line">Yours,</span>
+      <br />
+      <br />
+      <span class="one-line">Sasha</span>
+      <br />
+      <br />
+      139 words
+    </p>
+
+    <h2>Частые ошибки</h2>
+    <h4>1. Нет перехода к вопросам</h4>
+    <p>
+      Обязательно нужно начинать абзац с вопросами с фразы, указывающей на то,
+      что сейчас будет информация об этих вопросах.
+      <br />
+      <br />
+      • By the way, I have some questions about ….
+      <br />
+      • By the way, I’m curious about ….
+      <br />
+      • That’s exciting news about ….
+      <br />
+      • In your email you mention… can you tell me more about…
+      <br />
+      <br />
+      Пример ошибки
+      <br />
+      Задание: My uncle Keith is coming to visit us next week…
+      <br />
+      <br />
+      Ответ участника экзамена:
+      <br />
+      <br />
+      By the way, I have some questions to you. What is his name? How old is he?
+      <br />
+      Не совсем понятно кто такой “he” нет ни слова о дяде.
+      <br />
+      <br />
+      Следовало написать так:
+      <br />
+      <br />
+      By the way, I have some questions about your uncle. What is his name? How
+      old is he?
+      <br />
+      Тут мы сразу задаем вопрос о дяде и очевидно, что “he” – это именно дядя
+    </p>
+    <h4>2. Неправильное время</h4>
+    <p>
+      Задание: Yesterday was my father’s birthday…
+      <br />
+      <br />
+      Ответ участника экзамена:
+      <br />
+      <br />
+      Now I would like to ask you about your father’s birthday. How are you
+      going to spend it? What present are you going to give him? How many people
+      will be invited?
+      <br />
+      Вопросы теме, но день рождение уже прошёл, а вопросы задаются в будущем.
+      Здесь нужно поставить всё в прошедшее время.
+      <br />
+      <br />
+      Следовало написать так:
+      <br />
+      <br />
+      Now I would like to ask you about your father’s birthday. How did you
+      spend it? What present did you give him? How many people were invited?
+    </p>
+
+    <h4>3. Вопрос не по теме</h4>
+    <p>
+      Самая распространённая ошибка. Многие участники экзамена смотрят на
+      опорную фразу в конце задания, но не читают строку про задание, где именно
+      говориться о том, что нужно спрашивать.
+      <br />
+      <br />
+      Задание: ... I’m going to visit my friends in London soon… ask 3 questions
+      about her trip to London
+      <br />
+      <br />
+      Ответ участника экзамена:
+      <br />
+      <br />
+      By the way, I’d like to ask you about London. What do you think about
+      London? What's the weather like in London?
+      <br />
+      Нужно спросить не о самом Лондоне, а именно о ее поездке
+      <br />
+      <br />
+      Следовало написать так:
+      <br />
+      <br />
+      By the way, I’d like to ask you about your trip to London. What are you
+      going to visit in London? Where are you going to stay during your trip?
+      What are you planning to do during your trip?
+      <br />
+      <br />
+      Задание: …Yesterday I had my first lesson of Japanese... - ask 3 questions
+      about the Japanese lesson
+      <br />
+      <br />
+      Ответ участника экзамена:
+      <br />
+      <br />
+      By the way, I’d like to ask you about the lesson. Are the Japanese lessons
+      free? Do you like the Japanese language? Is Japanese difficult?
+      <br />
+      Все эти вопросы не соответствуют поставленной задаче. Нужно было спросить
+      про этот конкретный, один единственный урок.
+      <br />
+      <br />
+      Следовало написать так:
+      <br />
+      <br />
+      By the way, I’d like to ask you about your Japanese lesson. Where did your
+      first Japanese lesson take place? Did you like the lesson? Have you learnt
+      anything new?
+    </p>
+
+    <h4>4. Запрашивается то, что уже известно</h4>
+    <p>
+      Задание: ... I’ve recently returned from a nice summer camp…
+      <br />
+      - ask 3 questions about the summer camp
+      <br />
+      <br />
+      Ответ участника экзамена:
+      <br />
+      <br />
+      By the way, I’d like to ask you about the camp. What do you think about
+      the camp? How often do you go to camps? Do you like the camps?
+      <br />
+      Первый и последний вопрос повторяют друг друга и к тому же мы знаем ответ,
+      т.к. “ I’ve recently returned from a nice summer camp”.
+      <br />
+      А второй вопрос не по теме, потому что нужно задать вопрос именно про тот
+      конкретный лагерь, где был наш друг.
+      <br />
+      <br />
+      Следовало написать так:
+      <br />
+      <br />
+      By the way, I’d like to ask you about the camp. Where is this summer camp
+      situated? Is the camp big? What facilities are there in the camp?
+    </p>
+
+    <p>Полезные таблицы с вводными словами</p>
+
+    <div class="container">
+      <img src="https://svgshare.com/i/1AE3.svg" alt="table" />
+    </div>
+
+    <div id="modal" class="modal" onclick="closeModal()">
+      <img src="" id="modal-image" class="modal-content" alt="modal content" />
+    </div>
+
+    <script>
+      // открытие модального окна с тестом
+      function openTest(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+      }
+      // закрытие модального окна с тестом
+      function closeTest(modal) {
+        modal.style.display = "none";
+      }
+
+      // добавляет событие открытия модального окна для каждой кнопки
+      document.querySelectorAll(".open-test").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          openTest(modalId);
+        };
+      });
+
+      // после нажатия по кнопке, кнопка становится серой и это записывается в localstorage
+      function saveButtonStates() {
+        const states = [];
+        document.querySelectorAll(".open-test").forEach((button) => {
+          if (button.classList.contains("clicked")) {
+            states.push(button.id);
+          }
+        });
+        localStorage.setItem("clickedButtons", JSON.stringify(states));
+      }
+
+      // ддостает из localstorage закрашеные в серый кнопки
+      function restoreButtonStates() {
+        const savedStates =
+          JSON.parse(localStorage.getItem("clickedButtons")) || [];
+        savedStates.forEach((buttonId) => {
+          const button = document.getElementById(buttonId);
+          if (button) {
+            button.classList.add("clicked");
+          }
+        });
+      }
+
+      // добавляет событие проверки ответов! и покраски в другой цвет в случае не правильности
+      document.querySelectorAll(".check-answer").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          const answers = {
+            "modal-2": ["FIRST", "TWENTIETH"],
+          };
+
+          const correctAnswers = answers[modalId];
+          const inputs = document.querySelectorAll(`#${modalId} .input`);
+
+          inputs.forEach((input, index) => {
+            if (input.value.trim().toUpperCase() !== correctAnswers[index]) {
+              input.classList.add("incorrect");
+              input.classList.remove("correct");
+            } else {
+              input.classList.add("correct");
+              input.classList.remove("incorrect");
+            }
+          });
+
+          const openButton = document.querySelector(
+            `.open-test[data-modal="${modalId}"]`,
+          );
+          openButton.classList.add("clicked");
+          saveButtonStates();
+        };
+      });
+
+      // закрывает модальное окно если нажать мимо него
+      window.onclick = function (event) {
+        if (event.target.classList.contains("training-modal")) {
+          closeTest(event.target);
+        }
+      };
+
+      // открывает модальное окно с таблице svg
+      function openModal(imageElement) {
+        let modal = document.getElementById("modal");
+        let modalImg = document.getElementById("modal-image");
+
+        modal.style.display = "flex";
+        modalImg.src = imageElement.src;
+      }
+
+      // функция для закрытия модального окна с изображением таблицы svg
+      function closeModal() {
+        let modal = document.getElementById("modal");
+        modal.style.display = "none";
+      }
+
+      // функция для открытия модального окна с подсказкой
+      function openHint(hintId) {
+        document.getElementById(hintId).style.display = "flex";
+      }
+
+      // Функция для закрытия подсказки
+      function closeHint(hintId) {
+        document.getElementById(hintId).style.display = "none";
+      }
+
+      // Добавляем обработчик для каждого текста с подсказкой
+      document.querySelectorAll(".tooltip-text").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      // обработчик для совета по кнопочке
+      document.querySelectorAll(".question-mark").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      // достает закрашеные кнопки )
+      window.onload = restoreButtonStates;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Учебная страница по устной части</title>
+    <style>
+      ::selection {
+        background: #aeaeae;
+        color: #ffffff;
+      }
+      body {
+        -webkit-tap-highlight-color: rgba(17, 17, 17, 0.3);
+        font-family: "Poppins", sans-serif;
+        line-height: 1.5;
+        font-weight: 700;
+        margin: 15px;
+        background-color: #111111;
+        color: #ffffff;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      p {
+        margin-bottom: 10px;
+        color: #aeaeae;
+      }
+      strong {
+        font-weight: 800;
+      }
+      span {
+        line-height: 1.9;
+      }
+      button {
+        font-family: "Poppins", sans-serif;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #ff8000;
+        border-radius: 5px;
+        border: 0;
+        height: 35px;
+        width: 170px;
+        margin-top: 15px;
+        transition: all 150ms;
+      }
+      button:active {
+        opacity: 0.3;
+      }
+      button.clicked {
+        background-color: #363636;
+        color: #4e5053;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container img {
+        max-width: 100%;
+        cursor: pointer;
+      }
+      .modal {
+        justify-content: center;
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        overflow: auto;
+      }
+      .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 80%;
+      }
+      .highlight {
+        background-color: #ff8000;
+        color: #ffffff;
+        padding-right: 25px;
+        padding-left: 25px;
+        border-radius: 5px;
+      }
+      /*эти стили для подчеркивания*/
+      .input-line {
+        background-color: #111111;
+        padding-right: 75px;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .one-line {
+        border-bottom: 1px solid #ff8000;
+      }
+      .two-line {
+        position: relative;
+        border-bottom: 3px double #ff8000;
+      }
+      /*эти стили для подчеркивания*/
+      .training-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .training-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #333333;
+        margin: auto;
+        border-radius: 20px;
+        padding: 10px;
+        max-width: 90%;
+      }
+      .check-answer {
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+      .input {
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        margin-bottom: 1px;
+        font-weight: 700;
+        font-size: 16px;
+        width: 70px;
+        border: none;
+        outline: none;
+        color: #aeaeae;
+        background-color: #333333;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .input.correct {
+        border-color: green;
+      }
+      .input.incorrect {
+        border-color: red;
+      }
+      .tooltip-text {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        color: #ff8000;
+        cursor: pointer;
+        transition: all 150ms;
+      }
+      .tooltip-text:active {
+        color: rgba(255, 128, 0, 0.31);
+      }
+      .hint-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .hint-content {
+        background-color: #333333;
+        color: #ffffff;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        max-height: 50%;
+        overflow-y: auto;
+        text-align: left;
+      }
+      .hint-content p {
+        margin-bottom: 16px;
+      }
+      .hint-content strong {
+        color: #ffffff;
+      }
+      .question-mark {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        transition: all 200ms;
+        right: 15px;
+        margin-top: 15px;
+        filter: drop-shadow(0 0 0.3rem #ff8000);
+      }
+      .question-mark:active {
+        filter: drop-shadow(0 0 0.5rem #ff8000);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- главный заголовок -->
+    <h1>
+      Задание 1 <br />
+      Алгоритм работы
+    </h1>
+    <p>
+      Тебе нужно вслух прочитать текст. На подготовку у тебя есть полторы
+      минуты. <br /><br />
+      1. Пробежаться по тексту и найти сложные для тебя слова
+      <br />
+      <br />
+      2. Вспомнить их произношение
+      <br />
+      <br />
+      3. Правильно интонировать предложения.
+    </p>
+    <h4>Примеры интонирования:</h4>
+    <p>
+      a. Нисходящий тон в утвердительных предложениях
+      <br />
+      <br />
+      b. Однородные члены предложения при перечислении читаются с повышением
+      интонации, а в конце предложения тон понижается;
+      <br />
+      <br />
+      c. общие вопросы произносятся с восходящей интонацией в конце вопроса
+      <br />
+      <br />
+      d. Пауза после вводных конструкций
+      <br />
+      <br />
+      e. Соблюдение фразового ударения - <br /><br />
+      Служебные слова: артикли, союзы, вспомогательные и модальные глаголы,
+      местоимения, оказываются безударными. <br /><br />
+      Знаменательные части речи: существительные, прилагательные, смысловые
+      глаголы – всегда оказываются под ударением.
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19ov.svg"
+        alt="question-mark"
+        class="question-mark"
+        data-hint="hint-1"
+      />
+    </div>
+    <p>
+      Например: <br />
+      <br />
+      There is nothing fancy or expensive about happiness. On the
+      <span class="one-line">contrary</span>, happiness is simple and slow. It
+      means choosing peace and <span class="one-line">quiet</span> over
+      excitement. It is wearing your old
+      <span class="one-line">pyjamas</span> and watching a movie the day before
+      Christmas. It is sitting in your window watching the weather while sipping
+      your favourite tea on a rainy day. It is looking into the bonfire
+      surrounded by your friends and family while your bread is slowly baking.
+      <br />
+      <br />
+      Happiness is always about <span class="one-line">appreciating</span> the
+      simple pleasures in life and <span class="one-line">thus</span> it can be
+      achieved on a really low budget. You cannot buy the right atmosphere or a
+      sense of togetherness. It’s all about time, interest and
+      <span class="one-line">engagement</span> in the people around you. Thus,
+      happiness is an atmosphere which is not improved by spending more money on
+      it, but rather, in some ways, the opposite. After all, the best things in
+      life are absolutely free.
+    </p>
+
+    <div class="hint-modal" id="hint-1" onclick="closeHint('hint-1')">
+      <div class="hint-content">
+        <p>
+          Обрати внимание на числительные, даты и количественные числительные
+          читаются по-разному
+          <br />
+          <br />
+          1380 people were in the hall –
+          <strong>one thousand three hundred and eighty</strong> people were in
+          the hall
+          <br />
+          <br />
+          The Battle of Kulikovo happened in 1380 - The Battle of Kulikovo
+          happened in <strong>thirteen eighty</strong>
+          <br />
+          <br />
+          1900 – nineteen hundred; 1905 – nineteen o [əu] five
+        </p>
+      </div>
+    </div>
+
+    <h4>Частые ошибки участников ЕГЭ при выполнении задания 1:</h4>
+    <p>
+      • делают грубые фонетические ошибки, искажающие смысл высказывания;
+      <br />
+      <br />
+      • неправильно ставят ударение в словах, состоящих из нескольких слогов;
+      <br />
+      <br />
+      • неправильно ставят ударение в сложных словах, имеющих два корня,
+      например: foreground, airborne;
+      <br />
+      <br />
+      • пропускают слова и строчки;
+      <br />
+      <br />
+      • неправильно расставляют фразовое ударение;
+      <br />
+      <br />
+      • не умеют делить простые и сложные предложения на смысловые группы, так
+      как не понимают структуры предложения;
+      <br />
+      <br />
+      • не умеют читать логически связанные группы с перечислением;
+      <br />
+      <br />
+      • неправильно произносят разные коммуникативные типы предложений.
+    </p>
+
+    <div id="modal" class="modal" onclick="closeModal()">
+      <img src="" id="modal-image" class="modal-content" alt="modal content" />
+    </div>
+
+    <script>
+      // открытие модального окна с тестом
+      function openTest(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+      }
+      // закрытие модального окна с тестом
+      function closeTest(modal) {
+        modal.style.display = "none";
+      }
+
+      // добавляет событие открытия модального окна для каждой кнопки
+      document.querySelectorAll(".open-test").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          openTest(modalId);
+        };
+      });
+
+      // после нажатия по кнопке, кнопка становится серой и это записывается в localstorage
+      function saveButtonStates() {
+        const states = [];
+        document.querySelectorAll(".open-test").forEach((button) => {
+          if (button.classList.contains("clicked")) {
+            states.push(button.id);
+          }
+        });
+        localStorage.setItem("clickedButtons", JSON.stringify(states));
+      }
+
+      // ддостает из localstorage закрашеные в серый кнопки
+      function restoreButtonStates() {
+        const savedStates =
+          JSON.parse(localStorage.getItem("clickedButtons")) || [];
+        savedStates.forEach((buttonId) => {
+          const button = document.getElementById(buttonId);
+          if (button) {
+            button.classList.add("clicked");
+          }
+        });
+      }
+
+      // добавляет событие проверки ответов! и покраски в другой цвет в случае не правильности
+      document.querySelectorAll(".check-answer").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          const answers = {
+            "modal-2": ["FIRST", "TWENTIETH"],
+          };
+
+          const correctAnswers = answers[modalId];
+          const inputs = document.querySelectorAll(`#${modalId} .input`);
+
+          inputs.forEach((input, index) => {
+            if (input.value.trim().toUpperCase() !== correctAnswers[index]) {
+              input.classList.add("incorrect");
+              input.classList.remove("correct");
+            } else {
+              input.classList.add("correct");
+              input.classList.remove("incorrect");
+            }
+          });
+
+          const openButton = document.querySelector(
+            `.open-test[data-modal="${modalId}"]`,
+          );
+          openButton.classList.add("clicked");
+          saveButtonStates();
+        };
+      });
+
+      // закрывает модальное окно если нажать мимо него
+      window.onclick = function (event) {
+        if (event.target.classList.contains("training-modal")) {
+          closeTest(event.target);
+        }
+      };
+
+      // открывает модальное окно с таблице svg
+      function openModal(imageElement) {
+        let modal = document.getElementById("modal");
+        let modalImg = document.getElementById("modal-image");
+
+        modal.style.display = "flex";
+        modalImg.src = imageElement.src;
+      }
+
+      // функция для закрытия модального окна с изображением таблицы svg
+      function closeModal() {
+        let modal = document.getElementById("modal");
+        modal.style.display = "none";
+      }
+
+      // функция для открытия модального окна с подсказкой
+      function openHint(hintId) {
+        document.getElementById(hintId).style.display = "flex";
+      }
+
+      // Функция для закрытия подсказки
+      function closeHint(hintId) {
+        document.getElementById(hintId).style.display = "none";
+      }
+
+      // Добавляем обработчик для каждого текста с подсказкой
+      document.querySelectorAll(".tooltip-text").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      // обработчик для совета по кнопочке
+      document.querySelectorAll(".question-mark").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      // достает закрашеные кнопки )
+      window.onload = restoreButtonStates;
+    </script>
+  </body>
+</html>

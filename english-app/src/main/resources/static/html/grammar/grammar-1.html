@@ -1,0 +1,879 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Учебная страница по грамматике</title>
+    <style>
+      ::selection {
+        background: #aeaeae;
+        color: #ffffff;
+      }
+      body {
+        -webkit-tap-highlight-color: rgba(17, 17, 17, 0.3);
+        font-family: "Poppins", sans-serif;
+        line-height: 1.5;
+        font-weight: 700;
+        margin: 15px;
+        background-color: #111111;
+        color: #ffffff;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      p {
+        margin-bottom: 10px;
+        color: #aeaeae;
+      }
+      strong {
+        font-weight: 800;
+      }
+      span {
+        line-height: 1.9;
+      }
+      button {
+        font-family: "Poppins", sans-serif;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #ff8000;
+        border-radius: 5px;
+        border: 0;
+        height: 35px;
+        width: 170px;
+        margin-top: 15px;
+        transition: all 150ms;
+      }
+      button:active {
+        opacity: 0.3;
+      }
+      button.clicked {
+        background-color: #363636;
+        color: #4e5053;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container img {
+        max-width: 100%;
+        cursor: pointer;
+      }
+      .modal {
+        justify-content: center;
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        overflow: auto;
+      }
+      .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 80%;
+      }
+      .highlight {
+        background-color: #ff8000;
+        color: #ffffff;
+        padding-right: 25px;
+        padding-left: 25px;
+        border-radius: 5px;
+      }
+      .input-line {
+        background-color: #111111;
+        padding-right: 75px;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .one-line {
+        border-bottom: 1px solid #ff8000;
+      }
+      .two-line {
+        position: relative;
+        border-bottom: 3px double #ff8000;
+      }
+      .training-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        overflow-y: auto;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .training-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #333333;
+        margin: auto;
+        border-radius: 20px;
+        padding: 10px;
+        max-width: 90%;
+        max-height: 80%;
+        overflow-y: auto;
+      }
+      .check-answer {
+        min-height: 35px;
+        min-width: 170px;
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+      .input {
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        margin-bottom: 1px;
+        font-weight: 700;
+        font-size: 16px;
+        width: 70px;
+        border: none;
+        outline: none;
+        color: #aeaeae;
+        background-color: #333333;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .input.correct {
+        border-color: green;
+      }
+      .input.incorrect {
+        border-color: red;
+      }
+      .tooltip-text {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        color: #ff8000;
+        cursor: pointer;
+        transition: all 150ms;
+      }
+      .tooltip-text:active {
+        color: rgba(255, 128, 0, 0.31);
+      }
+      .hint-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .hint-content {
+        background-color: #333333;
+        color: #ffffff;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        max-height: 50%;
+        overflow-y: auto;
+        text-align: left;
+      }
+      .hint-content p {
+        margin-bottom: 16px;
+      }
+      .hint-content strong {
+        color: #ffffff;
+      }
+      .question-mark {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        transition: all 200ms;
+        right: 15px;
+        margin-top: 15px;
+        filter: drop-shadow(0 0 0.3rem #ff8000);
+      }
+      .question-mark:active {
+        filter: drop-shadow(0 0 0.5rem #ff8000);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      Задания 19-24 <br />
+      Алгоритм работы
+    </h1>
+    <p>
+      Эти задания касаются <strong>только грамматических изменений</strong>. То
+      есть тебе <strong>НЕ нужно</strong> менять часть речи, например, делать
+      существительное из глагола или прилагательного и наоборот.
+    </p>
+    <p>
+      В этих заданиях нужно понять и запомнить, как может меняться каждая часть
+      речи. Итак, разберем изменения частей речи.
+    </p>
+
+    <h2>1. Если пропущено существительное</h2>
+    <p>
+      Тебе нужно поставить его во множественное число <br />
+      <br />
+      Возможно, тебе попадется существительное, которое
+      <strong>изменяется по правилу</strong>. Давай его вспомним, если
+      существительное оканчивается на:
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19kM.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <p>
+      Однако, с подавляюще большой вероятностью тебе попадется существительное,
+      которое попадает под <strong>исключение</strong>
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19nZ.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <div class="container">
+      <button class="open-test" data-modal="modal-1" id="test-1">
+        Go check yourself !
+      </button>
+    </div>
+    <div class="training-modal" id="modal-1">
+      <div class="training-content">
+        <p>
+          There’s no doubt that
+          <input type="text" class="input" /> are going to like this invention
+          very much.
+          <span class="highlight">WOMAN</span>
+        </p>
+        <p>
+          Machu Picchu, often called “The Lost City of the Incas”, is probably
+          the most famous symbol of the Incan Empire. Machu Picchu is situated
+          7,875 <input type="text" class="input" /> above sea level in Peru.
+          <span class="highlight">FOOT</span>
+        </p>
+        <button class="check-answer" data-modal="modal-1">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <h2>2. Если пропущено числительное</h2>
+    <p>
+      Тут у нас одно простое правило,
+      <span class="tooltip-text" data-hint="hint-1">количественные</span>
+      числительные в заданиях 19-24 могут стать только
+      <span class="tooltip-text" data-hint="hint-2">порядковыми</span>.
+      <br />
+      <br />
+      Напомним пару моментов с исключениями
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19ja.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <div class="container">
+      <button class="open-test" data-modal="modal-2" id="test-2">
+        Go check yourself !
+      </button>
+    </div>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19ov.svg"
+        alt="question-mark"
+        class="question-mark"
+        data-hint="hint-3"
+      />
+    </div>
+    <div class="training-modal" id="modal-2">
+      <div class="training-content">
+        <p>
+          A cleaning wand is a totally new invention. It features the advanced
+          UV-C technology that helps to kill bacteria and germs. It’s the
+          <input type="text" class="input" /> ever cleaning device you can
+          literally take anywhere.
+          <span class="highlight">ONE</span>
+        </p>
+        <p>
+          For more than 800 years the castle was a fortress against the English
+          and rival Scottish clans. For the most part it was in a state of
+          neglect since then. About 150 years ago it became a luxurious farm
+          house and then in the early part of the
+          <input type="text" class="input" /> century it became a hunting and
+          fishing lodge.
+          <span class="highlight">TWENTY</span>
+        </p>
+        <button class="check-answer" data-modal="modal-2">
+          Check your answers
+        </button>
+      </div>
+    </div>
+    <div class="hint-modal" id="hint-1" onclick="closeHint('hint-1')">
+      <div class="hint-content">
+        <p>Количественные - ONE, TWO, SEVEN, NINETEEN.</p>
+      </div>
+    </div>
+    <div class="hint-modal" id="hint-2" onclick="closeHint('hint-2')">
+      <div class="hint-content">
+        <p>Порядковые - THE FIRST, THE SECOND, THE TWELFTH.</p>
+      </div>
+    </div>
+    <div class="hint-modal" id="hint-3" onclick="closeHint('hint-3')">
+      <div class="hint-content">
+        <p>
+          Определенный артикль THE уже стоит в тексте, в бланк ответов нужно
+          писать FIRST, FIFTH…
+          <br />
+          <br />
+          Если после пропуска стоит “than” это сравнительная степень
+        </p>
+      </div>
+    </div>
+
+    <h2>3. Если пропущено прилагательное/наречие</h2>
+    <p>
+      Прилагательные и наречия могут иметь
+      <strong
+        ><span class="tooltip-text" data-hint="hint-4">сравнительную</span> или
+        <span class="tooltip-text" data-hint="hint-5"
+          >превосходную</span
+        ></strong
+      >
+      степени, часто попадаются исключения
+    </p>
+    <p>Таблицы прилагательных:</p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19m9.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <p>Исключения:</p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19mA.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <p>Таблица наречий:</p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19nP.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <div class="container">
+      <button class="open-test" data-modal="modal-3" id="test-3">
+        Go check yourself !
+      </button>
+    </div>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19ov.svg"
+        alt="question-mark"
+        class="question-mark"
+        data-hint="hint-6"
+      />
+    </div>
+    <div class="training-modal" id="modal-3">
+      <div class="training-content">
+        <p>
+          The <input type="text" class="input" /> thing about it is that it can
+          clean anything.
+          <span class="highlight">GOOD</span>
+        </p>
+        <p>
+          Modern social media is full of people’s selfies. People use various
+          filters to look <input type="text" class="input" /> than they really
+          are, but is it worth it?
+          <span class="highlight">GOOD</span>
+        </p>
+        <p>
+          Becky Schroeder was only 10 years old when she came up with the idea
+          of the glo-paper. Two years <input type="text" class="input" />, in
+          1974, her invention was patented.
+          <span class="highlight">LATE</span>
+        </p>
+        <button class="check-answer" data-modal="modal-3">
+          Check your answers
+        </button>
+      </div>
+    </div>
+    <div class="hint-modal" id="hint-4" onclick="closeHint('hint-4')">
+      <div class="hint-content">
+        <p>Сравнительная - cheaper, bigger, faster, more expensive.</p>
+      </div>
+    </div>
+    <div class="hint-modal" id="hint-5" onclick="closeHint('hint-5')">
+      <div class="hint-content">
+        <p>
+          Превосходная - the cheapest, the biggest, fastest, the most expensive.
+        </p>
+      </div>
+    </div>
+    <div class="hint-modal" id="hint-6" onclick="closeHint('hint-6')">
+      <div class="hint-content">
+        <p>
+          Если после пропуска стоит <strong>“than”</strong> – нужно образовать
+          сравнительную степень.
+          <br />
+          <br />
+          Если перед пропуском <strong>“the”</strong> – нужно образовать
+          превосходную степень.
+          <br />
+          <strong>Но</strong> превосходная степень сравнения может
+          образовываться <strong>без</strong> артикля <strong>“the”</strong>:
+          <br />
+          <strong>“My best</strong> picture is “Starry Night””
+          <br />
+          <strong>“His worst</strong> feature is falsity”
+          <br />
+          <strong>“Their most expensive</strong>
+          treasure is the painting”
+        </p>
+      </div>
+    </div>
+
+    <h2>4. Если пропущено местоимение</h2>
+    <p>
+      1. Подчеркни грамматическую основу предложения, например:
+      <br />
+      <br />
+      <span>
+        <span class="one-line">Нe</span>
+        <span class="two-line">pointed out</span>
+        <span class="one-line">it</span>
+        <span class="two-line">was necessary to develop</span>
+        <span class="input-line">&nbsp;</span> critical thinking.
+        <span class="highlight">THEY</span></span
+      >
+      <br />
+      <br />
+      2. Переведи предложение: <br />
+      «Он отметил, что необходимо развивать
+      <span class="input-line">&nbsp;</span> критическое мышление.»
+      <br />
+      <br />
+      3. Проанализируй, какое местоимение может подходить. В этом случае
+      подходит только притяжательное местоимение (чей?/чьи?)
+      <br />
+      <br />
+      4. Запиши подходящий вариант
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19nU.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <div class="container">
+      <button class="open-test" data-modal="modal-4" id="test-4">
+        Go check yourself !
+      </button>
+    </div>
+    <div class="training-modal" id="modal-4">
+      <div class="training-content">
+        <p>
+          Do you know why people use silver and copper in medicine?
+          <input type="text" class="input" /> metals can kill dangerous bacteria
+          and viruses
+          <span class="highlight">THIS</span>
+        </p>
+        <p>
+          He was afraid that his critics would accuse
+          <input type="text" class="input" /> of hesitating if they saw a shaky
+          signature.
+          <span class="highlight">HE</span>
+        </p>
+        <p>
+          What is archeology? It is the study of human activity, primarily
+          through the study of <input type="text" class="input" /> material
+          remains.
+          <span class="highlight">IT</span>
+        </p>
+        <button class="check-answer" data-modal="modal-4">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <h2>5. Если пропущен глагол</h2>
+    <p>
+      1. Подчеркни грамматическую основу и определи нужную
+      <span class="tooltip-text" data-hint="hint-7">форму</span> глагола:
+      <br />
+      <br />
+      Robert A. Heinlein was a US science fiction author.
+      <span class="one-line">He</span> <span class="two-line">was</span> among
+      those writers <span class="one-line">who</span>
+      <span class="two-line">emphasized</span> scientific accuracy in their
+      fiction. <span class="one-line">He</span> also
+      <span class="input-line two-line">&nbsp;</span>
+      <span class="one-line">it</span>
+      <span class="two-line">was necessary to challenge</span> the readers.
+      <span class="highlight">THINK</span>
+      <br />
+      <br />
+      2. Пропущенный глагол – сказуемое
+      <br />
+      <br />
+      3. Переведи предложение
+      <br />
+      <br />
+      «Он был среди писателей, которые выделяли научную точность в своих
+      произведениях. Также он <span class="input-line">&nbsp;</span>, что было
+      необходимо озадачить/бросить вызов читателям»
+      <br />
+      <br />
+      4. Определи залог и время
+      <br />
+      <br />
+      Действие он совершает сам, это он думает/думал, что нужно бросить вызов
+      читателям – активный залог
+      <br />
+      <br />
+      Предыдущее предложение и предложение с пропуском написаны в простом
+      прошедшем Past Simple. Также глагол “THINK” в значении «считать/полагать»
+      не употребляется во временах Continuous, потому что это глагол состояния.
+      Остается вариант Past Simple – THOUGHT
+    </p>
+    <h4>Второй пример:</h4>
+    <p>
+      In 1896, <span class="one-line">Said Khalid</span>
+      <span class="two-line">seized power</span> in Zanzibar. A
+      <span class="one-line">British fleet</span> soon
+      <span class="two-line">arrived at the port</span> of Zanzibar and ordered
+      him out <span class="two-line">of the royal</span> palace. Khalid refused
+      to <span class="two-line">leave</span>.
+      <span class="two-line">At 9:02 on the</span> morning of August 27, British
+      ships started a fire <span class="two-line">on the palace</span>,
+      <span class="two-line">a war between</span> Britain and
+      <span class="one-line">Zanzibar</span>
+      <span class="input-line">&nbsp;</span>.
+      <span class="highlight">BEGIN</span>
+      <br />
+      <br />
+      1. Подчеркни грамматическую основу и определи нужную форму глагола
+      <br />
+      2. Пропущенный глагол – сказуемое
+      <br />
+      3. Переведи предложение
+      <br />
+      <br />
+      «В 1896 году Саид Халид захватил власть в Занзибаре. Вскоре в порт
+      Занзибара прибыл британский флот и приказал ему покинуть королевский
+      дворец. Халид отказался уходить. В 9:02 утра 27 августа британские корабли
+      открыли огонь по дворцу, война между Великобританией и Занзибаром
+      <span class="input-line">&nbsp;</span>.»
+      <br />
+      <br />
+      4. Определи залог и время «Война началась» - активный залог.
+      <br />
+      <br />
+      Предыдущее предложение и предложение с пропуском написаны в простом
+      прошедшем Past Simple. Речь идет об однократном действии в прошлом – твой
+      выбор – Past Simple - BEGAN
+    </p>
+    <h4>Третий пример:</h4>
+    <p>
+      То divers, the <span class="one-line">underwater world</span>
+      <span class="two-line">is silent</span>, and
+      <span class="two-line">we</span> <span class="two-line">call</span> the
+      ocean the «silent deep.» But to a fish, the underwater
+      <span class="one-line">world</span>
+      <span class="two-line">isn't silent at</span> all.
+      <span class="one-line">Fish</span>
+      <span class="two-line">can «hear»</span> other
+      <span class="one-line">fish</span>
+      <span class="input-line">&nbsp;</span> through the water.
+      <span class="highlight">MOVE</span>
+      <br />
+      <br />
+      1. Подчеркни грамматическую основу и определи нужную форму глагола
+      <br />
+      <br />
+      2. Пропущенный глагол – НЕ сказуемое, при этом это НЕ условное
+      предложение. Остается неличная форма глагола
+      <br />
+      <br />
+      3. Переведи предложение – «Рыбы могут «слышать» других рыб,
+      передвигающихся в воде» - буквально: «слышать других рыб (что делающими?)
+      двигающимися в воде»
+      <br />
+      <br />
+      4. Правильный ответ - “MOVING”
+    </p>
+    <h4>Четвертый пример:</h4>
+    <p>
+      <span class="one-line">The smell</span> of fast food
+      <span class="two-line">increases</span> your sense of taste,
+      <span class="input-line">&nbsp;</span> the experience to also feel more
+      enjoyable. <span class="highlight">CAUSE</span>
+      <br />
+      <br />
+      1. Подчеркни грамматическую основу и определи нужную форму глагола
+      <br />
+      <br />
+      2. Пропущенный глагол – НЕ сказуемое, при этом это НЕ условное
+      предложение. Остается неличная форма глагола
+      <br />
+      <br />
+      3. Переведи предложение – «Запах фаст-фуда усиливает ваше чувство вкуса,
+      вызывая еще более приятные ощущения»
+      <br />
+      <br />
+      4. На вопросы «Что делающий? Что делая?» в английском языке отвечает
+      причастие настоящего времени.
+      <br />
+      <br />
+      5. Правильный ответ - “CAUSING”
+      <br />
+      <br />
+      Как отличить причастие настоящего времени от герундия?
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19qX.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <h4>Пятый пример:</h4>
+    <p>
+      How would you like to go to school on Saturdays? If
+      <span class="one-line">you</span> <span class="two-line">lived</span> in
+      Japan, that’s just where <span class="one-line">you</span>
+      <span class="input-line one-line">&nbsp;</span> each Saturday morning.
+      <span class="highlight">BE</span>
+      <br />
+      <br />
+      1. Подчеркни грамматическую основу и определи нужную форму глагола
+      <br />
+      <br />
+      2. Глагол пропущен в условном предложении.
+      <br />
+      <br />
+      3. Переведи предложение – «Вы хотели бы ходить в школу по субботам? Если
+      бы вы жили в Японии, то были бы в ней каждое субботнее утро»
+      <br />
+      <br />
+      Вспомним типы условных предложений
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19zP.svg"
+        alt="таблица будет тут позже"
+        onclick="openModal(this)"
+      />
+    </div>
+    <div class="container">
+      <button class="open-test" data-modal="modal-5" id="test-5">
+        Go check yourself !
+      </button>
+    </div>
+    <h4>Схема для работы с глаголами в этом задании</h4>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19qY.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <div class="training-modal" id="modal-5">
+      <div class="training-content">
+        <p>
+          He pointed out that any science fiction book
+          <input type="text" class="input" /> a success if the author followed
+          these two important principles.
+          <span class="highlight">BE</span>
+        </p>
+        <p>
+          I shouldn't be expected to stay silent, should I? I couldn't be silent
+          even if I <input type="text" class="input" />.
+          <span class="highlight">TRY</span>
+        </p>
+        <p>
+          In Albany, Oregon, anyone between the ages of 5 and 12 can enter the
+          Bubble Gum Blowing Contest. You'll win some books if you
+          <input type="text" class="input" />
+          the biggest bubble or the bubble that lasts the longest.
+          <span class="highlight">BLOW</span>
+        </p>
+        <button class="check-answer" data-modal="modal-5">
+          Check your answers
+        </button>
+      </div>
+    </div>
+    <div class="hint-modal" id="hint-7" onclick="closeHint('hint-7')">
+      <div class="hint-content">
+        <p>
+          <strong>Формы глагола в заданиях 19-24</strong>
+          <br />
+          <br />
+          <strong>• Личная форма – глагол является сказуемым</strong>
+          <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o Активный залог
+          <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o Пассивный залог
+          <br />
+          <strong>• Неличная форма – глагол не является сказуемым</strong>
+          <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o Инфинитив
+          <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o Герундий
+          <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o Причастие
+          <br />
+          <strong>• Условные предложения</strong>
+          <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o Conditional 0
+          <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o Conditional 1
+          <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o Conditional 2
+        </p>
+      </div>
+    </div>
+
+    <div id="modal" class="modal" onclick="closeModal()">
+      <img src="" id="modal-image" class="modal-content" alt="modal content" />
+    </div>
+
+    <script>
+      function openTest(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+      }
+
+      function closeTest(modal) {
+        modal.style.display = "none";
+      }
+
+      document.querySelectorAll(".open-test").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          openTest(modalId);
+        };
+      });
+
+      function saveButtonStates() {
+        const states = [];
+        document.querySelectorAll(".open-test").forEach((button) => {
+          if (button.classList.contains("clicked")) {
+            states.push(button.id);
+          }
+        });
+        localStorage.setItem("clickedButtons", JSON.stringify(states));
+      }
+
+      function restoreButtonStates() {
+        const savedStates =
+          JSON.parse(localStorage.getItem("clickedButtons")) || [];
+        savedStates.forEach((buttonId) => {
+          const button = document.getElementById(buttonId);
+          if (button) {
+            button.classList.add("clicked");
+          }
+        });
+      }
+
+      document.querySelectorAll(".check-answer").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          const answers = {
+            "modal-1": ["WOMEN", "FEET"],
+            "modal-2": ["FIRST", "TWENTIETH"],
+            "modal-3": ["BEST", "BETTER", "LATER"],
+            "modal-4": ["THESE", "HIM", "ITS"],
+            "modal-5": ["WOULDBE", "TRIED", "BLOW"],
+          };
+
+          const correctAnswers = answers[modalId];
+          const inputs = document.querySelectorAll(`#${modalId} .input`);
+
+          inputs.forEach((input, index) => {
+            if (input.value.trim().toUpperCase() !== correctAnswers[index]) {
+              input.classList.add("incorrect");
+              input.classList.remove("correct");
+            } else {
+              input.classList.add("correct");
+              input.classList.remove("incorrect");
+            }
+          });
+
+          const openButton = document.querySelector(
+            `.open-test[data-modal="${modalId}"]`,
+          );
+          openButton.classList.add("clicked");
+          saveButtonStates();
+        };
+      });
+
+      window.onclick = function (event) {
+        if (event.target.classList.contains("training-modal")) {
+          closeTest(event.target);
+        }
+      };
+
+      function openModal(imageElement) {
+        let modal = document.getElementById("modal");
+        let modalImg = document.getElementById("modal-image");
+
+        modal.style.display = "flex";
+        modalImg.src = imageElement.src;
+      }
+
+      function closeModal() {
+        let modal = document.getElementById("modal");
+        modal.style.display = "none";
+      }
+
+      function openHint(hintId) {
+        document.getElementById(hintId).style.display = "flex";
+      }
+
+      // Функция для закрытия подсказки
+      function closeHint(hintId) {
+        document.getElementById(hintId).style.display = "none";
+      }
+
+      // Добавляем обработчик для каждого текста с подсказкой
+      document.querySelectorAll(".tooltip-text").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      // обработчик для совета по кнопочке
+      document.querySelectorAll(".question-mark").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      window.onload = restoreButtonStates;
+    </script>
+  </body>
+</html>

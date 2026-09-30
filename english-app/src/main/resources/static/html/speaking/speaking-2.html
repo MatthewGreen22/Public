@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Учебная страница по устной части</title>
+    <style>
+      ::selection {
+        background: #aeaeae;
+        color: #ffffff;
+      }
+      body {
+        -webkit-tap-highlight-color: rgba(17, 17, 17, 0.3);
+        font-family: "Poppins", sans-serif;
+        line-height: 1.5;
+        font-weight: 700;
+        margin: 15px;
+        background-color: #111111;
+        color: #ffffff;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      p {
+        margin-bottom: 10px;
+        color: #aeaeae;
+      }
+      strong {
+        font-weight: 800;
+      }
+      span {
+        line-height: 1.9;
+      }
+      button {
+        font-family: "Poppins", sans-serif;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #ff8000;
+        border-radius: 5px;
+        border: 0;
+        height: 35px;
+        width: 170px;
+        margin-top: 15px;
+        transition: all 150ms;
+      }
+      button:active {
+        opacity: 0.3;
+      }
+      button.clicked {
+        background-color: #363636;
+        color: #4e5053;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container img {
+        max-width: 100%;
+        cursor: pointer;
+      }
+      .modal {
+        justify-content: center;
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        overflow: auto;
+      }
+      .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 80%;
+      }
+      .highlight {
+        background-color: #ff8000;
+        color: #ffffff;
+        padding-right: 25px;
+        padding-left: 25px;
+        border-radius: 5px;
+      }
+      /*эти стили для подчеркивания*/
+      .input-line {
+        background-color: #111111;
+        padding-right: 75px;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .one-line {
+        border-bottom: 1px solid #ff8000;
+      }
+      .two-line {
+        position: relative;
+        border-bottom: 3px double #ff8000;
+      }
+      /*эти стили для подчеркивания*/
+      .training-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .training-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #333333;
+        margin: auto;
+        border-radius: 20px;
+        padding: 10px;
+        max-width: 90%;
+      }
+      .check-answer {
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+      .input {
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        margin-bottom: 1px;
+        font-weight: 700;
+        font-size: 16px;
+        width: 70px;
+        border: none;
+        outline: none;
+        color: #aeaeae;
+        background-color: #333333;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .input.correct {
+        border-color: green;
+      }
+      .input.incorrect {
+        border-color: red;
+      }
+      .tooltip-text {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        color: #ff8000;
+        cursor: pointer;
+        transition: all 150ms;
+      }
+      .tooltip-text:active {
+        color: rgba(255, 128, 0, 0.31);
+      }
+      .hint-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .hint-content {
+        background-color: #333333;
+        color: #ffffff;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        max-height: 50%;
+        overflow-y: auto;
+        text-align: left;
+      }
+      .hint-content p {
+        margin-bottom: 16px;
+      }
+      .hint-content strong {
+        color: #ffffff;
+      }
+      .question-mark {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        transition: all 200ms;
+        right: 15px;
+        margin-top: 15px;
+        filter: drop-shadow(0 0 0.3rem #ff8000);
+      }
+      .question-mark:active {
+        filter: drop-shadow(0 0 0.5rem #ff8000);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- главный заголовок -->
+    <h1>
+      Заданиe 2 <br />
+      Алгоритм работы
+    </h1>
+    <p>
+      1. При подготовке к заданию представь, что ты действительно звонишь в
+      организацию (отель, спорт-клуб, языковую школу и т.д.) и хочешь выяснить
+      недостающую информацию.
+      <br />
+      <br />
+      2. Тебе нужно задать 4 прямых (direct) вопроса. То есть, общие,
+      специальные вопросы и вопросы к подлежащему
+    </p>
+
+    <div class="container"><h4>Общий вопрос</h4></div>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/1A8E.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <p></p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/1AAK.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+
+    <div class="container"><h4>Специальный вопрос</h4></div>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/1AB_.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <p></p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/1ABa.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+
+    <div class="container"><h4>Вопрос к подлежащему</h4></div>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/1AA9.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19ov.svg"
+        alt="question-mark"
+        class="question-mark"
+        data-hint="hint-1"
+      />
+    </div>
+
+    <p></p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/1ABC.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+
+    <h4>Пример:</h4>
+    <div class="container">
+      <img src="https://svgshare.com/i/1AAN.svg" alt="advertisement" />
+    </div>
+    <p>
+      You are considering visiting the Timpanogos Cave and now you'd like to get
+      more information. In 1.5 minutes you are to ask four direct questions to
+      find out about the following:
+      <br />
+      <br />
+      1) location of the cave
+      <br />
+      <br />
+      2) opening hours
+      <br />
+      <br />
+      3) guided tour availability
+      <br />
+      <br />
+      4) entrance fee
+      <br />
+      <br />
+      You have 20 seconds to ask each question.
+    </p>
+    <p>
+      Ответ: Hello, I’m going to visit the Timpanogos Cave and I would like to
+      get more information. Where is the cave located? What are the opening
+      hours of the cave? Is a guided tour available? What is the entrance fee?
+    </p>
+
+    <h4>Практика:</h4>
+    <p>№ 1</p>
+    <div class="container">
+      <img src="https://svgshare.com/i/1AAB.svg" alt="advertisement" />
+    </div>
+    <p>
+      You are considering studying at an English school and now you'd like to
+      get more information. In 1.5 minutes you are to ask four direct questions
+      to find out about the following:
+      <br />
+      <br />
+      1) distance from the city centre
+      <br />
+      <br />
+      2) types of courses available
+      <br />
+      <br />
+      3) possible accommodation
+      <br />
+      <br />
+      4) price for three weeks
+      <br />
+      <br />
+      You have 20 seconds to ask each question.
+    </p>
+
+    <p>№ 2</p>
+    <div class="container">
+      <img src="https://svgshare.com/i/1AAr.svg" alt="advertisement" />
+    </div>
+    <p>
+      You are considering a diving course during your study abroad and now you'd
+      like to get more information. In 1.5 mi- nutes you are to ask four direct
+      questions to find out about the following:
+      <br />
+      <br />
+      1) location of the swimming pool
+      <br />
+      <br />
+      2) price for a beginner course
+      <br />
+      <br />
+      3) duration of the course
+      <br />
+      <br />
+      4) necessary gear
+      <br />
+      <br />
+      You have 20 seconds to ask each question.
+    </p>
+
+    <p>№ 3</p>
+    <div class="container">
+      <img src="https://svgshare.com/i/1AA3.svg" alt="advertisement" />
+    </div>
+    <p>
+      You are considering staying at a hotel in a German city of Lübeck and now
+      you’d like to get more information. In 1.5 minutes you are to ask four
+      direct questions to find out about the following:
+      <br />
+      <br />
+      1) directions to the hotel
+      <br />
+      <br />
+      2) distance from the city centre
+      <br />
+      <br />
+      3) hotel facilities
+      <br />
+      <br />
+      4) room price per night
+      <br />
+      <br />
+      You have 20 seconds to ask
+    </p>
+
+    <div class="hint-modal" id="hint-1" onclick="closeHint('hint-1')">
+      <div class="hint-content">
+        <p>
+          Фразы типа What about … ? или I'd like to know … недопустимы - они не
+          являются прямыми вопросами.
+        </p>
+      </div>
+    </div>
+
+    <div id="modal" class="modal" onclick="closeModal()">
+      <img src="" id="modal-image" class="modal-content" alt="modal content" />
+    </div>
+
+    <script>
+      function openTest(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+      }
+
+      function closeTest(modal) {
+        modal.style.display = "none";
+      }
+
+      document.querySelectorAll(".open-test").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          openTest(modalId);
+        };
+      });
+
+      function saveButtonStates() {
+        const states = [];
+        document.querySelectorAll(".open-test").forEach((button) => {
+          if (button.classList.contains("clicked")) {
+            states.push(button.id);
+          }
+        });
+        localStorage.setItem("clickedButtons", JSON.stringify(states));
+      }
+
+      function restoreButtonStates() {
+        const savedStates =
+          JSON.parse(localStorage.getItem("clickedButtons")) || [];
+        savedStates.forEach((buttonId) => {
+          const button = document.getElementById(buttonId);
+          if (button) {
+            button.classList.add("clicked");
+          }
+        });
+      }
+
+      document.querySelectorAll(".check-answer").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          const answers = {
+            "modal-2": ["FIRST", "TWENTIETH"],
+          };
+
+          const correctAnswers = answers[modalId];
+          const inputs = document.querySelectorAll(`#${modalId} .input`);
+
+          inputs.forEach((input, index) => {
+            if (input.value.trim().toUpperCase() !== correctAnswers[index]) {
+              input.classList.add("incorrect");
+              input.classList.remove("correct");
+            } else {
+              input.classList.add("correct");
+              input.classList.remove("incorrect");
+            }
+          });
+
+          const openButton = document.querySelector(
+            `.open-test[data-modal="${modalId}"]`,
+          );
+          openButton.classList.add("clicked");
+          saveButtonStates();
+        };
+      });
+
+      window.onclick = function (event) {
+        if (event.target.classList.contains("training-modal")) {
+          closeTest(event.target);
+        }
+      };
+
+      function openModal(imageElement) {
+        let modal = document.getElementById("modal");
+        let modalImg = document.getElementById("modal-image");
+
+        modal.style.display = "flex";
+        modalImg.src = imageElement.src;
+      }
+
+      function closeModal() {
+        let modal = document.getElementById("modal");
+        modal.style.display = "none";
+      }
+
+      function openHint(hintId) {
+        document.getElementById(hintId).style.display = "flex";
+      }
+
+      function closeHint(hintId) {
+        document.getElementById(hintId).style.display = "none";
+      }
+
+      document.querySelectorAll(".tooltip-text").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      document.querySelectorAll(".question-mark").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      window.onload = restoreButtonStates;
+    </script>
+  </body>
+</html>

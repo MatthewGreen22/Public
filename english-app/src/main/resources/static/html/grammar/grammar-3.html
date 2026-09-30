@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Учебная страница по грамматике</title>
+    <style>
+      ::selection {
+        background: #aeaeae;
+        color: #ffffff;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        -webkit-tap-highlight-color: rgba(17, 17, 17, 0.3);
+        font-family: "Poppins", sans-serif;
+        line-height: 1.5;
+        font-weight: 700;
+        margin: 15px;
+        background-color: #111111;
+        color: #ffffff;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      p {
+        margin-bottom: 10px;
+        color: #aeaeae;
+      }
+      strong {
+        font-weight: 800;
+      }
+      span {
+        line-height: 1.9;
+      }
+      button {
+        font-family: "Poppins", sans-serif;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #ff8000;
+        border-radius: 5px;
+        border: 0;
+        height: 35px;
+        width: 170px;
+        margin-top: 15px;
+        transition: all 150ms;
+      }
+      button:active {
+        opacity: 0.3;
+      }
+      button.clicked {
+        background-color: #363636;
+        color: #4e5053;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .container img {
+        max-width: 100%;
+        cursor: pointer;
+      }
+      .modal {
+        justify-content: center;
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        overflow: auto;
+      }
+      .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 80%;
+      }
+      .highlight {
+        background-color: #ff8000;
+        color: #ffffff;
+        padding-right: 25px;
+        padding-left: 25px;
+        border-radius: 5px;
+      }
+      .input-line {
+        background-color: #111111;
+        padding-right: 75px;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .one-line {
+        border-bottom: 1px solid #ff8000;
+      }
+      .two-line {
+        position: relative;
+        border-bottom: 3px double #ff8000;
+      }
+      .training-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .training-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #333333;
+        margin: auto;
+        border-radius: 20px;
+        padding: 10px;
+        max-width: 90%;
+      }
+      .check-answer {
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+      .input {
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        margin-bottom: 1px;
+        font-weight: 700;
+        font-size: 16px;
+        width: 70px;
+        border: none;
+        outline: none;
+        color: #aeaeae;
+        background-color: #333333;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .input.correct {
+        border-color: green;
+      }
+      .input.incorrect {
+        border-color: red;
+      }
+      .tooltip-text {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        color: #ff8000;
+        cursor: pointer;
+        transition: all 150ms;
+      }
+      .tooltip-text:active {
+        color: rgba(255, 128, 0, 0.31);
+      }
+      .hint-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .hint-content {
+        background-color: #333333;
+        color: #ffffff;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        max-height: 50%;
+        overflow-y: auto;
+        text-align: left;
+      }
+      .hint-content p {
+        margin-bottom: 16px;
+      }
+      .hint-content strong {
+        color: #ffffff;
+      }
+      .question-mark {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        transition: all 200ms;
+        right: 15px;
+        margin-top: 15px;
+        filter: drop-shadow(0 0 0.3rem #ff8000);
+      }
+      .question-mark:active {
+        filter: drop-shadow(0 0 0.5rem #ff8000);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      Задания 30-36 <br />
+      Алгоритм работы
+    </h1>
+    <p>
+      В этих заданиях проверяется ваш словарный запас и знание синонимов и
+      многозначности слов.
+      <br />
+      <br />
+      Давай рассмотрим конкретный пример из демоверсии 2024 года и поможем тебе
+      сориентироваться.
+    </p>
+    <div class="container"><h4>At the office</h4></div>
+    <div class="container">
+      <p>
+        Max White tapped on Paul's office door at 15.00. He walked in without
+        <span id="30" class="tooltip-text">30</span>
+        <span class="input-line">&nbsp;</span>
+        <span class="one-line">for</span> a response. Paul looked up from the
+        papers on his desk and said, "Sit down, Max. Please
+        <span id="31" class="tooltip-text">31</span>
+        <span class="input-line">&nbsp;</span>
+        <span class="one-line">me</span> everything you know."
+      </p>
+      <p>
+        It was Tuesday, the eighth of July; the day before, the
+        <span class="one-line"
+          >rumors had been rampant throughout the company</span
+        >
+        that more of the top executives were going to be sacked on the explicit
+        orders of Brent Horn. <span id="32" class="tooltip-text">32</span>
+        <span class="input-line">&nbsp;</span>, nobody knew who would be
+        terminated. So most of the people were
+        <span id="33" class="tooltip-text">33</span>
+        <span class="input-line">&nbsp;</span>
+        <span class="one-line">about</span> losing their jobs. An atmosphere of
+        fear reigned in the company for the first time in over thirty years, and
+        there was gloom on every floor of the building.
+      </p>
+      <p>
+        <span class="one-line">Max had all the information</span>, as he had
+        just told Paul on the phone; now he leaned closer and confided, "I
+        understand George Sanford
+        <span class="one-line">was given his walking orders</span> late on
+        Friday afternoon. And this week we'll see the
+        <span id="34" class="tooltip-text">34</span>
+        <span class="input-line">&nbsp;</span> of Jim Cooper and John Turner,
+        two good men." It was terrible news. They had been with the company
+        about as long as Paul had. They were among Brent Horn's big supporters
+        when he was trying to get the company back from the DeWitts. They were
+        much <span id="35" class="tooltip-text">35</span>
+        <span class="input-line">&nbsp;</span>
+        <span class="one-line">by everyone</span>. Paul couldn't
+        <span id="36" class="tooltip-text">36</span>
+        <span class="input-line">&nbsp;</span>
+        <span class="one-line">of</span> their dismissal. He was truly shocked,
+        and it showed. The company had changed the moment Brent Horn had taken
+        control, and it genially concerned him.
+      </p>
+    </div>
+    <p>
+      30: <br />
+      1) requiring 2) demanding 3) expecting 4) waiting
+    </p>
+    <p>
+      31: <br />
+      1) tell 2) say 3) talk 4) speak
+    </p>
+    <p>
+      32: <br />
+      1) Therefore 2) Although 3) Moreover 4) However
+    </p>
+    <p>
+      33: <br />
+      1) bothered 2) troubled 3) annoyed 4) worried
+    </p>
+    <p>
+      34: <br />
+      1) determination 2) demonstration 3) departure 4) destruction
+    </p>
+    <p>
+      35: <br />
+      1) respected 2) remained 3) recognized 4) regarded
+    </p>
+    <p>
+      36: <br />
+      1) accept 2) approve 3) appreciate 4) admire
+    </p>
+    <h4 id="task-30" class="tooltip-text">Задание 30</h4>
+    <p>
+      1. Тебе нужен контекст, поэтому прочитай соседние предложения
+      <br />
+      <br />
+      2. Проанализируй предложение с пропуском, предлоги и местоимения – твои
+      друзья
+      <br />
+      <br />
+      3. Переведи предложения – «Макс Уайт постучал в дверь кабинета Пола в
+      15.00. Он вошел, не дожидаясь ответа. Пол поднял глаза от бумаг на своем
+      столе и сказал…»
+      <br />
+      <br />
+      4. Можно исключить точно неверные варианты. “Expecting” – не подходит, так
+      как это «рассчитывать, ожидать», а Макс не рассчитывал на ответ, а не
+      дождался его. “requiring” тоже не подходит, так как Макс не требовал
+      ответа, а не дождался его.
+      <br />
+      <br />
+      5. Wait for – ждать, предлог “for” подсказывает на частотное употребление
+      “wait for”
+      <br />
+      <br />
+      6. Ответ – 4
+    </p>
+    <h4 id="task-31" class="tooltip-text">Задание 31</h4>
+    <p>
+      1. Тебе нужен контекст, поэтому прочитай соседние предложения
+      <br />
+      <br />
+      2. Проанализируй предложение с пропуском, предлоги и местоимения – твои
+      друзья
+      <br />
+      <br />
+      3. Переведи предложения – «Макс Уайт постучал в дверь кабинета Пола в
+      15.00. Он вошел, не дожидаясь ответа. Пол поднял глаза от бумаг на своем
+      столе и сказал: «Садись, Макс. Пожалуйста, расскажи мне всё, что знаешь»
+    </p>
+    <div class="container">
+      <p><strong>Употребление say/tell/talk/speak</strong></p>
+      <img
+        src="https://svgshare.com/i/19xB.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <p>
+      4. После пропуска стоит местоимение “me” – подходит только вариант 1
+      “tell”
+    </p>
+    <h4 id="task-32" class="tooltip-text">Задание 32</h4>
+    <p>
+      1. Тебе нужен контекст, поэтому прочитай соседние предложения
+      <br />
+      <br />
+      2. Проанализируй предложение с пропуском, предлоги и местоимения – твои
+      друзья
+      <br />
+      <br />
+      3. Переведи предложения – «Был вторник, восьмое июля; за день до этого по
+      компании распространились слухи о том, что еще несколько топ-менеджеров
+      будут уволены по прямому приказу Брента Хорна.
+      <span class="input-line">&nbsp;</span> Никто не знал, кто будет уволен.
+      Поэтому большинство людей боялось потерять работу» То есть, слухи ходили,
+      но наверняка никто не знал
+      <br />
+      <br />
+      4. Переведи варианты и исключи лишние. Therefore – поэтому, although –
+      хотя, moreover – более того, however – однако
+      <br />
+      <br />
+      5. По смыслу подходят “although” и “however”. Но запятая не ставится сразу
+      после слова “although”, а после “however” ставится
+      <br />
+      <br />
+      6. Ответ – 4
+    </p>
+    <h4 id="task-33" class="tooltip-text">Задание 33</h4>
+    <p>
+      1. Тебе нужен контекст, поэтому прочитай соседние предложения
+      <br />
+      <br />
+      2. Проанализируй предложение с пропуском, предлоги и местоимения – твои
+      друзья
+      <br />
+      <br />
+      3. Переведи предложение – «Поэтому большинство людей боялось потерять
+      работу»
+      <br />
+      <br />
+      4. Исключи лишние варианты. Предлог “about” подсказывает частотное
+      выражение “to be worried about” – быть чем-то обеспокоенным.
+      <br />
+      <br />
+      5. Ответ - 4
+    </p>
+    <h4 id="task-34" class="tooltip-text">Задание 34</h4>
+    <p>
+      1. Тебе нужен контекст, поэтому прочитай соседние предложения
+      <br />
+      <br />
+      2. Проанализируй предложение с пропуском, предлоги и местоимения – твои
+      друзья
+      <br />
+      <br />
+      3. Переведи предложения – «У Макса была вся информация, о чем он только
+      что сообщил Полу по телефону; теперь он наклонился ближе и доверительно
+      сообщил: “Я так понимаю, Джорджу Сэнфорду были даны соответствующие
+      распоряжения поздно вечером в пятницу. И на этой неделе мы увидим 34
+      <span class="input-line">&nbsp;</span> Джима Купера и Джона Тернера, двух
+      хороших людей”. Это были ужасные новости.» речь идет о сокращении
+      сотрудников “walking orders” еще можно перевести, как «билет на
+      свободу/волю»
+      <br />
+      <br />
+      4. Среди вариантов подходящий смысл «отправление» имеет только вариант 3 –
+      “departure”
+    </p>
+    <h4 id="task-35" class="tooltip-text">Задание 35</h4>
+    <p>
+      1. Тебе нужен контекст, поэтому прочитай соседние предложения
+      <br />
+      <br />
+      2. Проанализируй предложение с пропуском, предлоги и местоимения – твои
+      друзья
+      <br />
+      <br />
+      3. Переведи предложения – «Они проработали в компании примерно столько же,
+      сколько и Пол. Они были одними из самых активных сторонников Брента Хорна,
+      когда он пытался вернуть компанию Девиттам. Все их очень
+      <span class="input-line">&nbsp;</span>. Пол не
+      <span class="input-line">&nbsp;</span> их увольнение.
+      <br />
+      <br />
+      4. Все их очень уважали – под «уважали» подходит только вариант 1
+      “respected”
+      <br />
+      <br />
+      5. Вариант 4 “regarded” означает «обратить внимание на кого-то» или
+      «пожелать кому-то лучшего». Respect означает «восхищаться, признавать или
+      смотреть на другого человека».
+      <br />
+      <br />
+      6. Ответ – 1
+    </p>
+    <h4 id="task-36" class="tooltip-text">Задание 36</h4>
+    <p>
+      1. Тебе нужен контекст, поэтому прочитай соседние предложения
+      <br />
+      <br />
+      2. Проанализируй предложение с пропуском, предлоги и местоимения – твои
+      друзья
+      <br />
+      <br />
+      3. Переведи предложения – «Они проработали в компании примерно столько же,
+      сколько и Пол. Они были одними из самых активных сторонников Брента Хорна,
+      когда он пытался вернуть компанию Девиттам. Все их очень уважали. Пол не
+      <span class="input-line">&nbsp;</span> их увольнение.
+      <br />
+      <br />
+      4. Предлог “of” явно оставляет нам только второй вариант “approve of” –
+      одобрять что-то
+    </p>
+    <div class="container">
+      <button onclick="window.location='goBack'">Go check yourself !</button>
+    </div>
+
+    <div id="modal" class="modal" onclick="closeModal()">
+      <img src="" id="modal-image" class="modal-content" alt="modal content" />
+    </div>
+
+    <script>
+      for (let i = 30; i <= 36; i++) {
+        document.getElementById(i.toString()).onclick = function () {
+          document.getElementById("task-" + i).scrollIntoView();
+        };
+      }
+
+      for (let i = 30; i <= 36; i++) {
+        document.getElementById("task-" + i).onclick = function () {
+          document.getElementById(i.toString()).scrollIntoView();
+        };
+      }
+
+      function openModal(imageElement) {
+        let modal = document.getElementById("modal");
+        let modalImg = document.getElementById("modal-image");
+
+        modal.style.display = "flex";
+        modalImg.src = imageElement.src;
+      }
+
+      function closeModal() {
+        let modal = document.getElementById("modal");
+        modal.style.display = "none";
+      }
+    </script>
+  </body>
+</html>

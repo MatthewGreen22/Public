@@ -1,0 +1,2538 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Учебная страница по грамматике</title>
+    <style>
+      ::selection {
+        background: #aeaeae;
+        color: #ffffff;
+      }
+      body {
+        -webkit-tap-highlight-color: rgba(17, 17, 17, 0.3);
+        font-family: "Poppins", sans-serif;
+        line-height: 1.5;
+        font-weight: 700;
+        margin: 15px;
+        background-color: #111111;
+        color: #ffffff;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      p {
+        margin-bottom: 10px;
+        color: #aeaeae;
+      }
+      strong {
+        font-weight: 800;
+      }
+      span {
+        line-height: 1.9;
+      }
+      button {
+        font-family: "Poppins", sans-serif;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #ff8000;
+        border-radius: 5px;
+        border: 0;
+        height: 35px;
+        width: 170px;
+        margin-top: 15px;
+        transition: all 150ms;
+      }
+      button:active {
+        opacity: 0.3;
+      }
+      button.clicked {
+        background-color: #363636;
+        color: #4e5053;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container img {
+        max-width: 100%;
+        cursor: pointer;
+      }
+      .modal {
+        justify-content: center;
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        overflow: auto;
+      }
+      .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 80%;
+      }
+      .highlight {
+        background-color: #ff8000;
+        color: #ffffff;
+        padding-right: 25px;
+        padding-left: 25px;
+        border-radius: 5px;
+      }
+      .input-line {
+        background-color: #111111;
+        padding-right: 75px;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .one-line {
+        border-bottom: 1px solid #ff8000;
+      }
+      .two-line {
+        position: relative;
+        border-bottom: 3px double #ff8000;
+      }
+      .training-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .training-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #333333;
+        margin: auto;
+        border-radius: 20px;
+        padding: 10px;
+        max-width: 90%;
+        max-height: 80%;
+        overflow-y: auto;
+      }
+      .check-answer {
+        min-height: 35px;
+        min-width: 170px;
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+      .input {
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        margin-bottom: 1px;
+        font-weight: 700;
+        font-size: 16px;
+        width: 70px;
+        border: none;
+        outline: none;
+        color: #aeaeae;
+        background-color: #333333;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .input.correct {
+        border-color: green;
+      }
+      .input.incorrect {
+        border-color: red;
+      }
+      .tooltip-text {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        color: #ff8000;
+        cursor: pointer;
+        transition: all 150ms;
+      }
+      .tooltip-text:active {
+        color: rgba(255, 128, 0, 0.31);
+      }
+      .hint-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .hint-content {
+        background-color: #333333;
+        color: #ffffff;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        max-height: 50%;
+        overflow-y: auto;
+        text-align: left;
+      }
+      .hint-content p {
+        margin-bottom: 16px;
+      }
+      .hint-content strong {
+        color: #ffffff;
+      }
+      .question-mark {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        transition: all 200ms;
+        right: 15px;
+        margin-top: 15px;
+        filter: drop-shadow(0 0 0.3rem #ff8000);
+      }
+      .question-mark:active {
+        filter: drop-shadow(0 0 0.5rem #ff8000);
+      }
+      .according {
+        color: #aeaeae;
+        background-color: #333333;
+        border-radius: 20px;
+        cursor: pointer;
+        text-align: left;
+        transition: 0.3s;
+        padding: 10px;
+        margin-bottom: 22px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+      .panel {
+        background-color: #333333;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+      }
+      .panel img {
+        padding: 10px;
+      }
+      .orange-text {
+        color: #ff8000;
+        font-weight: 600;
+      }
+      .open-test {
+        margin-top: 0;
+      }
+      .text-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Вспомогательные таблицы</h1>
+    <div class="according">
+      Употребление <span class="orange-text">so/such/too/enough</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A6o.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-235607">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-235607">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. He’s difficult to understand because he speaks
+            <input type="text" class="input" /> quickly.
+          </p>
+          <p>
+            2. Jack isn’t tall <input type="text" class="input" /> to play
+            basketball.
+          </p>
+          <p>
+            3. I like Tom and Ann. They’re
+            <input type="text" class="input" /> nice people.
+          </p>
+          <p>
+            4. It was a great holiday. We had
+            <input type="text" class="input" /> good time.
+          </p>
+          <p>
+            5. This test is <input type="text" class="input" /> easy for me. I
+            would like a more difficult one.
+          </p>
+          <p>
+            6. I was surprised that he looked
+            <input type="text" class="input" /> well after
+            <input type="text" class="input" /> serious illness.
+          </p>
+          <p>
+            7. The weather is <input type="text" class="input" /> bad today for
+            having a picnic.
+          </p>
+          <p>
+            8. Everything is <input type="text" class="input" /> expensive these
+            days, isn’t it?
+          </p>
+          <p>
+            9. I can get lost in this city because I don’t know it well
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            10. I have to go. I didn’t realise it was
+            <input type="text" class="input" /> late.
+          </p>
+        </div>
+
+        <button class="check-answer" data-modal="modal-235607">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление <span class="orange-text">make/do</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A5n.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-564078">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-564078">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. Don’t forget to <input type="text" class="input" /> your teeth
+            before you go to bed.
+          </p>
+          <p>
+            2. Exercise can <input type="text" class="input" /> a big difference
+            to your health.
+          </p>
+          <p>
+            3. He finds it difficult to
+            <input type="text" class="input" /> friends.
+          </p>
+          <p>4. I hate <input type="text" class="input" /> housework.</p>
+          <p>
+            5. I’d like to <input type="text" class="input" /> an appointment
+            with Doctor Evans, please.
+          </p>
+          <p>
+            6. I’ve <input type="text" class="input" /> a complaint to the
+            police about the noise.
+          </p>
+          <p>
+            7. <input type="text" class="input" /> certain that we have enough
+            juice for the party.
+          </p>
+          <p>
+            8. You <input type="text" class="input" /> the washing-up and I’ll
+            do the drying.
+          </p>
+          <p>
+            9. Many students are finding it difficult to
+            <input type="text" class="input" /> ends meet.
+          </p>
+          <p>
+            10. Scientists are planning to
+            <input type="text" class="input" /> experiments to test the
+            effectiveness of the new drug.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-564078">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление <span class="orange-text">have/take</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A53.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-763512">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-763512">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. Mr. Jackson, can I <input type="text" class="input" /> a word
+            with you, please. It’s very important.
+          </p>
+          <p>
+            2. Could you <input type="text" class="input" /> care of my hamster
+            while I’m on holiday, please?
+          </p>
+          <p>
+            3. My parents’ divorce <input type="text" class="input" /> a big
+            effect on me.
+          </p>
+          <p>
+            4. They were always together so I just
+            <input type="text" class="input" /> it for granted that they were
+            married.
+          </p>
+          <p>
+            5. Choosing a future career, we should
+            <input type="text" class="input" /> into account our preferences and
+            abilities.
+          </p>
+          <p>
+            6. I’m absolutely free today. Let’s
+            <input type="text" class="input" /> dinner together.
+          </p>
+          <p>
+            7. James <input type="text" class="input" /> an accident at work and
+            had to go to hospital.
+          </p>
+          <p>
+            8. I <input type="text" class="input" /> no trouble finding the
+            address on the Internet.
+          </p>
+          <p>
+            9. We <input type="text" class="input" /> great pride in Russia’s
+            scientific achievements.
+          </p>
+          <p>
+            10. We were late for the train so we
+            <input type="text" class="input" /> a taxi.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-763512">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление <span class="orange-text">say/tell/talk/speak</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A5o.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-972345">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-972345">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. When Jack saw me yesterday, he
+            <input type="text" class="input" /> ‘You look great!’
+          </p>
+          <p>
+            2. Generally <input type="text" class="input" />, it’s quite a good
+            hospital.
+          </p>
+          <p>
+            3. He <input type="text" class="input" /> us the answer an hour ago.
+          </p>
+          <p>
+            4. I’m going to <input type="text" class="input" /> something to the
+            neighbours about the noise.
+          </p>
+          <p>
+            5. The teacher was very upset by our misbehaviour and
+            <input type="text" class="input" /> to us angrily.
+          </p>
+          <p>
+            6. You do <input type="text" class="input" /> sense sometimes,
+            James.
+          </p>
+          <p>
+            7. The clock <input type="text" class="input" /> it’s five past ten.
+          </p>
+          <p>
+            8. It’s impossible to <input type="text" class="input" /> the twins
+            apart.
+          </p>
+          <p>
+            9. Simon <input type="text" class="input" /> to his mother on the
+            phone every week.
+          </p>
+          <p>
+            10. Do we always have to <input type="text" class="input" /> the
+            truth?
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-763512">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление
+      <span class="orange-text">look/glance/stare/scan/skim/see/watch</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A6y.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-748392">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-748392">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. Susanna quickly <input type="text" class="input" /> at her watch.
+            She was going to be late.
+          </p>
+          <p>
+            2. Cats <input type="text" class="input" /> in the dark better than
+            people.
+          </p>
+          <p>
+            3. When I called Jack yesterday, he was still
+            <input type="text" class="input" /> TV.
+          </p>
+          <p>
+            4. I’ve only <input type="text" class="input" /> his letter; I
+            haven’t read it carefully yet.
+          </p>
+          <p>
+            5. I’m sure I have never <input type="text" class="input" /> this
+            man before.
+          </p>
+          <p>
+            6. Chuck sat quietly for hours
+            <input type="text" class="input" /> into the distance, thinking of
+            what might have been.
+          </p>
+          <p>
+            7. You <input type="text" class="input" /> worried today! Has
+            anything happened?
+          </p>
+          <p>
+            8. Dave <input type="text" class="input" /> the horizon for any sign
+            of the boat.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-748392">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление
+      <span class="orange-text"
+        >historic/historical/prehistoric; economic/economical/economy/economics;
+        effective/efficient</span
+      >
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A4N.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A5e.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-945621">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-945621">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. Any occurrence in the past is a
+            <input type="text" class="input" /> event.
+          </p>
+          <p>
+            2. The hotel’s staff are friendly and
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            3. The US has been the world’s largest national
+            <input type="text" class="input" /> since the 1890s.
+          </p>
+          <p>
+            4. What’s the most <input type="text" class="input" /> way of
+            heating this building?
+          </p>
+          <p>
+            5. A <input type="text" class="input" /> event is an important
+            occurrence that stands out in history.
+          </p>
+          <p>
+            6. My brother wants to enter the Higher School of
+            <input type="text" class="input" /> in Moscow.
+          </p>
+          <p>
+            7. Humour is often far more <input type="text" class="input" /> than
+            shouting.
+          </p>
+          <p>
+            8. The country has been in a very poor
+            <input type="text" class="input" /> state in recent years.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-945621">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление
+      <span class="orange-text"
+        >cruise/voyage/journey/travel/trip/ tour/excursion/outing</span
+      >
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A5q.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A5r.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-357928">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-357928">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. We went on a guided <input type="text" class="input" /> of the
+            UK.
+          </p>
+          <p>
+            2. The first <input type="text" class="input" /> taken by the ocean
+            liner ‘Queen Mary’ took place in 1936.
+          </p>
+          <p>
+            3. Foreign <input type="text" class="input" /> never really appealed
+            to him until he visited England.
+          </p>
+          <p>
+            4. The Australian Museum offers group
+            <input type="text" class="input" /> with professional guides.
+          </p>
+          <p>
+            5. She’s away on a business <input type="text" class="input" /> and
+            won’t be back until next week.
+          </p>
+          <p>
+            6. They used to go on family <input type="text" class="input" /> to
+            the countryside.
+          </p>
+          <p>
+            7. Our parents wished us a safe
+            <input type="text" class="input" /> as we drove away.
+          </p>
+          <p>
+            8. My parents went on a/an
+            <input type="text" class="input" /> around the Mediterranean.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-357928">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление
+      <span class="orange-text"
+        >prescription/recipe/human/ humane/treat/cure/heal</span
+      >
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A5f.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление
+      <span class="orange-text"
+        >affect/effect; ensure/insure/make sure;
+        property/ownership/possessions/belongings</span
+      >
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A5z.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-836492">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-836492">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. The government must <input type="text" class="input" /> the
+            protection of endangered species.
+          </p>
+          <p>
+            2. Air pollution has a disastrous
+            <input type="text" class="input" /> on people’s health.
+          </p>
+          <p>
+            3. What is your most treasured <input type="text" class="input" />?
+          </p>
+          <p>
+            4. I think I’ve locked the door but you’d better make
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            5. British <input type="text" class="input" /> of this company was
+            formally recognized.
+          </p>
+          <p>
+            6. Industrial waste badly <input type="text" class="input" /> our
+            environment.
+          </p>
+          <p>
+            7. The sign said, ‘Private <input type="text" class="input" />. No
+            Trespassing.’
+          </p>
+          <p>
+            8. We have <input type="text" class="input" /> our house against
+            flood damage.
+          </p>
+          <p>9. He had few personal <input type="text" class="input" />.</p>
+        </div>
+        <button class="check-answer" data-modal="modal-836492">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление
+      <span class="orange-text"
+        >remember/remind/revision/review;
+        accident/incident/occasion/occurrence</span
+      >
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A79.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-629473">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-629473">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. I <input type="text" class="input" /> buying this book. However,
+            I can’t find it anywhere.
+          </p>
+          <p>2. He was killed in a car <input type="text" class="input" />.</p>
+          <p>
+            3. I had no <input type="text" class="input" /> to speak to him.
+          </p>
+          <p>
+            4. We have absolutely no time for
+            <input type="text" class="input" /> before our exams.
+          </p>
+          <p>
+            5. Street-fights are an everyday
+            <input type="text" class="input" /> in this area of the city.
+          </p>
+          <p>
+            6. Please <input type="text" class="input" /> me to buy this book
+            when we are in the shop.
+          </p>
+          <p>
+            7. Every time I think of this funny
+            <input type="text" class="input" />, I can’t help laughing.
+          </p>
+          <p>
+            8. Roger writes film <input type="text" class="input" /> for the
+            newspapers.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-629473">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление
+      <span class="orange-text"
+        >lend/borrow; receipt/cheque/cash/change; spend/waste</span
+      >
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A54.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-482639">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-482639">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. It’s important to be able to
+            <input type="text" class="input" /> money wisely.
+          </p>
+          <p>
+            2. Sorry, I don’t have any cash now. Can I pay by
+            <input type="text" class="input" />?
+          </p>
+          <p>
+            3. Have you got <input type="text" class="input" /> for a
+            twenty-dollar bill?
+          </p>
+          <p>
+            4. She really <input type="text" class="input" /> money buying loads
+            of clothes.
+          </p>
+          <p>
+            5. If you need money, I can <input type="text" class="input" /> you
+            $200.
+          </p>
+          <p>6. Do you have any <input type="text" class="input" /> on you?</p>
+          <p>
+            7. He always paid by credit card and kept the
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            8. She used to <input type="text" class="input" /> money from her
+            brother.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-482639">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление
+      <span class="orange-text"
+        >wage/salary/income/royalty; commission/perks/bonuses;
+        staff/team/crew</span
+      >
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A6g.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-194827">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-194827">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. Free meals are one of the <input type="text" class="input" /> of
+            this job.
+          </p>
+          <p>
+            2. Cruise <input type="text" class="input" /> ships resemble giant
+            floating hotels employing thousands of members.
+          </p>
+          <p>
+            3. <input type="text" class="input" /> on sales is a traditional way
+            for companies to pay their sales reps.
+          </p>
+          <p>
+            4. There is a good relationship between
+            <input type="text" class="input" /> and pupils at the school.
+          </p>
+          <p>5. His monthly <input type="text" class="input" /> is £500.</p>
+          <p>
+            6. They are the worst <input type="text" class="input" /> in
+            baseball.
+          </p>
+          <p>
+            7. We receive annual <input type="text" class="input" /> at the end
+            of the year.
+          </p>
+          <p>
+            8. What’s the starting hourly
+            <input type="text" class="input" /> for a waiter at Olive Garden?
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-194827">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление
+      <span class="orange-text"
+        >electric/electrical; eligible/illegible;
+        technical/technological/technology/techniques</span
+      >
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A4P.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-384756">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-384756">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. The pianist gave an
+            <input type="text" class="input" /> performance.
+          </p>
+          <p>
+            2. Recent advances in medical
+            <input type="text" class="input" /> have saved countless lives.
+          </p>
+          <p>
+            3. We learned some <input type="text" class="input" /> for relieving
+            stress.
+          </p>
+          <p>
+            4. Are you <input type="text" class="input" /> for early retirement
+            leave?
+          </p>
+          <p>
+            5. You can’t stop <input type="text" class="input" /> even if you
+            want to do it.
+          </p>
+          <p>
+            6. <input type="text" class="input" /> engineers design new and
+            better electronics.
+          </p>
+          <p>
+            7. If you have any problems with your new computer, we offer 24-hour
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            8. Megan’s handwriting is absolutely
+            <input type="text" class="input" />!
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-384756">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление
+      <span class="orange-text"
+        >pitch/voice/vocal; classic/classical;
+        convenient/comfortable/suitable</span
+      >
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A7L.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-529374">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-529374">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. Are you <input type="text" class="input" /> enough in this chair?
+          </p>
+          <p>
+            2. Can I remove the <input type="text" class="input" /> from a
+            recording to make a Karaoke track?
+          </p>
+          <p>
+            3. If it’s <input type="text" class="input" />, call me tomorrow
+            before noon.
+          </p>
+          <p>
+            4. She plays the piano and she has absolute
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            5. Hamlet is a <input type="text" class="input" /> example of a
+            tragedy.
+          </p>
+          <p>
+            6. These toys are not <input type="text" class="input" /> for
+            children under five.
+          </p>
+          <p>
+            7. I’ve got a cold and I think I’m losing my
+            <input type="text" class="input" />. I can’t talk at all.
+          </p>
+          <p>
+            8. I don’t mind listening to
+            <input type="text" class="input" /> music.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-529374">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление
+      <span class="orange-text"
+        >audience/viewer/spectator/cast; refuse/deny; been in/been to/gone
+        to</span
+      >
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A5R.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-738942">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-738942">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. After the final performance, the director threw a party for the
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            2. She is a regular <input type="text" class="input" /> of the
+            evening news.
+          </p>
+          <p>
+            3. My English pen friend has
+            <input type="text" class="input" /> Moscow for two days only so he
+            hasn’t seen much yet.
+          </p>
+          <p>
+            4. The concert attracted a large
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            5. The postman was accused of stealing money from the post office
+            but he <input type="text" class="input" /> everything.
+          </p>
+          <p>
+            6. We can have a party tomorrow as my parents have
+            <input type="text" class="input" /> London on a business trip.
+          </p>
+          <p>
+            7. The <input type="text" class="input" /> lining the road cheered
+            the racers on.
+          </p>
+          <p>
+            8. He offered to paint my house, but I
+            <input type="text" class="input" /> to hire him.
+          </p>
+          <p>
+            9. We have already <input type="text" class="input" /> Great
+            Britain. Let’s travel to the USA.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-738942">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Употребление
+      <span class="orange-text"
+        >lone/lonely/alone; suit/fit/match; room/space</span
+      >
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A5S.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-852391">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-852391">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. We replaced the bath with a shower to create more
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            2. She gets <input type="text" class="input" /> now that all her
+            friends have left the village.
+          </p>
+          <p>
+            3. This suit is the right size for you. It
+            <input type="text" class="input" /> you perfectly.
+          </p>
+          <p>
+            4. She <input type="text" class="input" /> must decide what to do.
+            No one else can do it for her.
+          </p>
+          <p>
+            5. There was a large empty <input type="text" class="input" /> on
+            the second floor.
+          </p>
+          <p>
+            6. Does this shirt <input type="text" class="input" /> these
+            trousers?
+          </p>
+          <p>
+            7. Police spokesman said that a/an
+            <input type="text" class="input" /> gunman was responsible for the
+            shooting.
+          </p>
+          <p>
+            8. You should wear more red. This colour
+            <input type="text" class="input" /> you very well.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-852391">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <h1>Фразовые глаголы</h1>
+    <div class="according">
+      Фразовый глагол
+      <span class="orange-text">look</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A60.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-914762">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-914762">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. If I come across an unknown English word, I look it
+            <input type="text" class="input" /> in a dictionary.
+          </p>
+          <p>
+            2. Look <input type="text" class="input" /> this exercise and
+            underline all irregular verbs in it.
+          </p>
+          <p>
+            3. My sister is looking <input type="text" class="input" /> an
+            English language course to improve her speaking skills.
+          </p>
+          <p>
+            4. I look <input type="text" class="input" /> to hearing from you
+            soon.
+          </p>
+          <p>
+            5. Look <input type="text" class="input" />! There’s a car coming.
+          </p>
+          <p>
+            6. He’s an excellent teacher. All his pupils look
+            <input type="text" class="input" /> to him.
+          </p>
+          <p>
+            7. We usually look <input type="text" class="input" /> the
+            neighbours’ dog while they’re on holiday.
+          </p>
+          <p>
+            8. Look <input type="text" class="input" /> my dictionary! Someone
+            has torn it!
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-914762">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Фразовый глагол
+      <span class="orange-text">turn</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A6p.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-627391">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-627391">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. It turned <input type="text" class="input" /> that she had known
+            him since childhood.
+          </p>
+          <p>
+            2. Will you turn <input type="text" class="input" /> the television,
+            please? It’s time for my favourite soap.
+          </p>
+          <p>
+            3. She turned <input type="text" class="input" /> at my house late
+            one night.
+          </p>
+          <p>
+            4. His first novel was turned <input type="text" class="input" /> a
+            television serial.
+          </p>
+          <p>
+            5. This programme is really boring. Let’s turn
+            <input type="text" class="input" /> to another channel.
+          </p>
+          <p>
+            6. Don’t forget to turn <input type="text" class="input" /> your
+            computer when you leave home.
+          </p>
+          <p>
+            7. Her family lived a long way away, and she had no one to turn
+            <input type="text" class="input" /> for advice.
+          </p>
+          <p>
+            8. He turned <input type="text" class="input" /> the job because it
+            involved too much travelling.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-627391">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Фразовый глагол
+      <span class="orange-text">go</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A68.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-582731">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-582731">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. Remember to go <input type="text" class="input" /> your essay
+            checking for grammar and spelling mistakes before you hand it in to
+            the teacher.
+          </p>
+          <p>
+            2. That bag really goes <input type="text" class="input" /> your
+            shoes.
+          </p>
+          <p>
+            3. I’ll just go and find out what’s going
+            <input type="text" class="input" /> outside.
+          </p>
+          <p>
+            4. He is planning to go <input type="text" class="input" /> for
+            politics after graduating from university.
+          </p>
+          <p>
+            5. Please close the door as you go
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            6. I’d rather not go <input type="text" class="input" /> detail now.
+            Can we discuss it later?
+          </p>
+          <p>
+            7. Stop talking and go <input type="text" class="input" /> writing!
+          </p>
+          <p>
+            8. This bacon smells awful. I think it’s gone
+            <input type="text" class="input" />.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-582731">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Фразовый глагол -
+      <span class="orange-text">bring и grow</span>
+      <div class="panel">
+        <div class="container">
+          <img src="" alt="table" onclick="openModal(this)" />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-739214">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-739214">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. A little friendly competition is a good way to bring the family
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            2. Ann never saw her father while she was growing
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            3. Do these photographs bring
+            <input type="text" class="input" /> any memories?
+          </p>
+          <p>
+            4. Have you heard the news? They’ve brought the match
+            <input type="text" class="input" /> to 5 p.m.
+          </p>
+          <p>
+            5. I’ve grown <input type="text" class="input" /> my old clothes.
+          </p>
+          <p>
+            6. Jane has grown <input type="text" class="input" /> a beautiful
+            woman.
+          </p>
+          <p>
+            7. John’s parents died when he was young and he was brought
+            <input type="text" class="input" /> by his aunt.
+          </p>
+          <p>
+            8. The new house slowly began to grow
+            <input type="text" class="input" /> her.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-739214">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Фразовый глагол
+      <span class="orange-text">come и fall</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A6q.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-485927">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-485927">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. She was twenty when she first fell
+            <input type="text" class="input" /> love.
+          </p>
+          <p>
+            2. Mark has come <input type="text" class="input" /> with a new idea
+            for our product.
+          </p>
+          <p>
+            3. My sister is falling <input type="text" class="input" /> with her
+            school work.
+          </p>
+          <p>4. Luca comes <input type="text" class="input" /> Italy.</p>
+          <p>
+            5. If your friend comes <input type="text" class="input" /> you and
+            your girlfriend, you’ll feel betrayed.
+          </p>
+          <p>
+            6. He fell <input type="text" class="input" /> Jane when they were
+            together at a music camp.
+          </p>
+          <p>7. I had fallen <input type="text" class="input" /> my parents.</p>
+          <p>
+            8. Have you ever come <input type="text" class="input" /> such a
+            horrible person in all your life?
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-485927">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Фразовый глагол
+      <span class="orange-text">give и work</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A7Y.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-493820">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-493820">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. Paul works <input type="text" class="input" /> at a local gym two
+            or three times a week.
+          </p>
+          <p>
+            2. His parents finally persuaded him to give
+            <input type="text" class="input" /> boxing.
+          </p>
+          <p>
+            3. We worked <input type="text" class="input" /> an immense appetite
+            climbing in the mountains.
+          </p>
+          <p>
+            4. Mary tried to smile but her voice gave her emotions
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            5. She usually works <input type="text" class="input" /> her extra
+            energy by going for a run.
+          </p>
+          <p>
+            6. Has she given you your tennis racket
+            <input type="text" class="input" /> yet?
+          </p>
+          <p>
+            7. The champion refused to give
+            <input type="text" class="input" /> and went on to win the set.
+          </p>
+          <p>
+            8. If she worked <input type="text" class="input" /> improving her
+            game, she could be a champion.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-493820">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Фразовый глагол
+      <span class="orange-text">take и fill</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A6s.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-196473">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-196473">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. Collecting stamps takes <input type="text" class="input" /> a lot
+            of time.
+          </p>
+          <p>
+            2. I spent an hour filling <input type="text" class="input" /> the
+            application form.
+          </p>
+          <p>
+            3. My watch stopped so the watchmaker took it
+            <input type="text" class="input" /> and cleaned.
+          </p>
+          <p>
+            4. His singing career has just begun to take
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            5. I’ve taken <input type="text" class="input" /> going for a walk
+            in the morning. It’s so relaxing!
+          </p>
+          <p>
+            6. As she read the poem, their eyes filled
+            <input type="text" class="input" /> with tears.
+          </p>
+          <p>
+            7. Guess what! Chris has taken
+            <input type="text" class="input" /> photography.
+          </p>
+          <p>
+            8. Both my sister and I take <input type="text" class="input" /> our
+            father. We have the same interests and hobbies.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-196473">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Фразовый глагол
+      <span class="orange-text">get и see</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A61.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-839471">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-839471">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. We all went to the station to see my grandmother
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            2. I think we got <input type="text" class="input" /> the wrong bus.
+            We’d better get <input type="text" class="input" /> at the next
+            stop.
+          </p>
+          <p>
+            3. What do you think is the best way of getting
+            <input type="text" class="input" /> Britain?
+          </p>
+          <p>
+            4. When will your parents get
+            <input type="text" class="input" /> from the USA?
+          </p>
+          <p>
+            5. You’d better pack our luggage and I’ll see
+            <input type="text" class="input" /> the tickets.
+          </p>
+          <p>6. I usually get on well with my sister.</p>
+          <p>
+            7. They’ll soon be here. The London train gets
+            <input type="text" class="input" /> at 10.05.
+          </p>
+          <p>
+            8. What a beautiful castle! I’d like to see
+            <input type="text" class="input" />.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-839471">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Фразовый глагол
+      <span class="orange-text">run и stay</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A62.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-204758">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-204758">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. When I travel to Great Britain, I stay either
+            <input type="text" class="input" /> a hotel or my relatives.
+          </p>
+          <p>
+            2. Our dog had a narrow escape yesterday when it was nearly run
+            <input type="text" class="input" /> by a car.
+          </p>
+          <p>
+            3. I wanted to buy some souvenirs but unfortunately I ran
+            <input type="text" class="input" /> of money.
+          </p>
+          <p>
+            4. We stayed <input type="text" class="input" /> late to watch a
+            film.
+          </p>
+          <p>
+            5. I nearly ran <input type="text" class="input" /> my teacher at
+            the supermarket yesterday.
+          </p>
+          <p>
+            6. I’d rather stay <input type="text" class="input" /> tonight. I
+            don’t feel very well.
+          </p>
+          <p>
+            7. Around 77,000 children under 16 run
+            <input type="text" class="input" /> from home every year.
+          </p>
+          <p>
+            8. It’s getting late. Would you like to stay
+            <input type="text" class="input" />? We’ve got a spare room for
+            guests.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-204758">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Фразовый глагол
+      <span class="orange-text">break и carry</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A55.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-374820">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-374820">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. Schools break <input type="text" class="input" /> for the
+            holidays in June.
+          </p>
+          <p>
+            2. The burglars broke <input type="text" class="input" /> the house
+            through the kitchen window.
+          </p>
+          <p>
+            3. If you carry <input type="text" class="input" /> spending money
+            like that, you’ll go bankrupt.
+          </p>
+          <p>
+            4. I need a new computer because my old one has broken
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            5. They got married a month before the war broke
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            6. The people were carried <input type="text" class="input" /> by
+            his passionate speech.
+          </p>
+          <p>
+            7. As she was talking, he suddenly broke
+            <input type="text" class="input" /> saying, ‘That’s a lie’.
+          </p>
+          <p>
+            8. Nick is carrying <input type="text" class="input" /> research on
+            nanotechnology.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-382746">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Фразовый глагол
+      <span class="orange-text">do и catch</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A5T.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-592384">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-592384">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. Now that they have a permanent job, they can do
+            <input type="text" class="input" /> any help from us.
+          </p>
+          <p>
+            2. This game has recently caught
+            <input type="text" class="input" /> with young people. They are
+            really crazy about it.
+          </p>
+          <p>
+            3. This is a lovely cottage although it needs doing
+            <input type="text" class="input" /> a bit.
+          </p>
+          <p>
+            4. I am not hungry. I can do <input type="text" class="input" /> a
+            cup of coffee. And two lumps of sugar, please.
+          </p>
+          <p>
+            5. The professor tried to catch me
+            <input type="text" class="input" /> , but I was well prepared for
+            the exam.
+          </p>
+          <p>
+            6. We have nothing to do <input type="text" class="input" /> this
+            incident.
+          </p>
+          <p>
+            7. They’ve just gone fishing. If you hurry, you’ll catch
+            <input type="text" class="input" /> with them at the bridge.
+          </p>
+          <p>
+            8. Computerization has enabled us to do
+            <input type="text" class="input" /> with a lot of paperwork.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-592384">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Фразовый глагол
+      <span class="orange-text">make и let</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A6Q.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-485920">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-485920">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. My dad was always really good at making
+            <input type="text" class="input" /> stories.
+          </p>
+          <p>
+            2. The British usually let
+            <input type="text" class="input" /> fireworks on the 5th of
+            November.
+          </p>
+          <p>
+            3. The numbers are too small — I can’t make them
+            <input type="text" class="input" /> at all.
+          </p>
+          <p>
+            4. The flag of the UK is made <input type="text" class="input" /> of
+            three crosses.
+          </p>
+          <p>
+            5. The story was made <input type="text" class="input" /> a film two
+            years ago.
+          </p>
+          <p>
+            6. She’s a great player, and never lets her team
+            <input type="text" class="input" />.
+          </p>
+          <p>
+            7. The thieves made <input type="text" class="input" /> with the
+            stolen paintings from the museum.
+          </p>
+          <p>
+            8. No amount of money can make
+            <input type="text" class="input" /> for the loss of this painting.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-485920">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Фразовый глагол
+      <span class="orange-text">keep и cut</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A7h.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-731462">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-731462">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. If you want to lose weight, you should cut
+            <input type="text" class="input" /> chocolate and sweets and cut
+            <input type="text" class="input" /> on salt.
+          </p>
+          <p>
+            2. We had to hurry to keep <input type="text" class="input" /> with
+            her.
+          </p>
+          <p>
+            3. The secret of dieting is to keep
+            <input type="text" class="input" /> it.
+          </p>
+          <p>
+            4. John kept <input type="text" class="input" /> smoking despite the
+            doctor’s advice to give it up.
+          </p>
+          <p>
+            5. I’m trying to keep <input type="text" class="input" /> fatty
+            foods.
+          </p>
+          <p>
+            6. They cut <input type="text" class="input" /> electricity
+            yesterday so I couldn’t cook anything.
+          </p>
+          <p>
+            7. Professional sportsmen keep <input type="text" class="input" /> a
+            strict diet.
+          </p>
+          <p>
+            8. Now we’re going to peel and cut
+            <input type="text" class="input" /> cucumbers for our salad.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-731462">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Фразовый глагол
+      <span class="orange-text">call и hold</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A7M.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-294861">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-294861">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. Please hold <input type="text" class="input" />. I’ll put you
+            through to Mr. Smith.
+          </p>
+          <p>
+            2. Experts call <input type="text" class="input" /> protecting sites
+            in Asia to ensure the survival of the tiger.
+          </p>
+          <p>
+            3. Tomorrow’s match has been called
+            <input type="text" class="input" /> because of the icy weather.
+          </p>
+          <p>
+            4. We decided to call our daughter
+            <input type="text" class="input" /> her grandmother.
+          </p>
+          <p>
+            5. Traffic was held <input type="text" class="input" /> for several
+            hours by the accident.
+          </p>
+          <p>
+            6. I called <input type="text" class="input" /> yesterday, but you
+            weren’t in.
+          </p>
+          <p>
+            7. I’m very busy now. Can I call you
+            <input type="text" class="input" /> later?
+          </p>
+          <p>
+            8. A lot of TV viewers called
+            <input type="text" class="input" /> during our talk show.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-294861">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="according">
+      Фразовый глагол
+      <span class="orange-text">pay, set и stand</span>
+      <div class="panel">
+        <div class="container">
+          <img
+            src="https://svgshare.com/i/1A7B.svg"
+            alt="table"
+            onclick="openModal(this)"
+          />
+        </div>
+        <div class="container">
+          <button class="open-test" data-modal="modal-518279">
+            Перейти к заданию
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="training-modal" id="modal-518279">
+      <div class="training-content">
+        <div class="text-container">
+          <p>
+            1. She is planning to set <input type="text" class="input" /> her
+            own business.
+          </p>
+          <p>
+            2. ‘BBC’ stands <input type="text" class="input" /> British
+            Broadcasting Corporation.
+          </p>
+          <p>
+            3. All those weeks of studying will pay
+            <input type="text" class="input" /> when you take the exam.
+          </p>
+          <p>
+            4. With startling black make-up, Goths certainly stand
+            <input type="text" class="input" /> in a crowd.
+          </p>
+          <p>
+            5. We all pay <input type="text" class="input" /> our mistakes in
+            some way at some time.
+          </p>
+          <p>
+            6. You should learn how to stand
+            <input type="text" class="input" /> for yourself as early as
+            possible.
+          </p>
+          <p>
+            7. They’ve just set <input type="text" class="input" /> on a
+            round-the-world cruise.
+          </p>
+          <p>
+            8. I remember that I owe you $200. I’ll pay you
+            <input type="text" class="input" /> in a week.
+          </p>
+        </div>
+        <button class="check-answer" data-modal="modal-518279">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div id="modal" class="modal" onclick="closeModal()">
+      <img src="" id="modal-image" class="modal-content" alt="modal content" />
+    </div>
+  </body>
+  <script>
+    document.querySelectorAll(".according").forEach((button) => {
+      button.onclick = function (event) {
+        if (event.target.closest(".open-test") || event.target.closest("img")) {
+          return;
+        }
+
+        this.classList.toggle("active");
+        let panel = this.querySelector(".panel");
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+      };
+    });
+
+    function openModal(imageElement) {
+      let modal = document.getElementById("modal");
+      let modalImg = document.getElementById("modal-image");
+
+      modal.style.display = "flex";
+      modalImg.src = imageElement.src;
+    }
+
+    function closeModal() {
+      let modal = document.getElementById("modal");
+      modal.style.display = "none";
+    }
+
+    function openTest(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.style.display = "flex";
+    }
+
+    function closeTest(modal) {
+      modal.style.display = "none";
+    }
+
+    document.querySelectorAll(".open-test").forEach((button) => {
+      button.onclick = function () {
+        const modalId = this.getAttribute("data-modal");
+        openTest(modalId);
+      };
+    });
+
+    function saveButtonStates() {
+      const states = [];
+      document.querySelectorAll(".open-test").forEach((button) => {
+        if (button.classList.contains("clicked")) {
+          states.push(button.id);
+        }
+      });
+      localStorage.setItem("clickedButtons", JSON.stringify(states));
+    }
+
+    function restoreButtonStates() {
+      const savedStates =
+        JSON.parse(localStorage.getItem("clickedButtons")) || [];
+      savedStates.forEach((buttonId) => {
+        const button = document.getElementById(buttonId);
+        if (button) {
+          button.classList.add("clicked");
+        }
+      });
+    }
+
+    document.querySelectorAll(".check-answer").forEach((button) => {
+      button.onclick = function () {
+        const modalId = this.getAttribute("data-modal");
+        const answers = {
+          "modal-235607": [
+            "so",
+            "enough",
+            "such",
+            "such a",
+            "too",
+            "so",
+            "such a",
+            "too",
+            "so",
+            "enough",
+            "so",
+          ],
+          "modal-564078": [
+            "do",
+            "make",
+            "make",
+            "doing",
+            "make",
+            "made",
+            "Make",
+            "do",
+            "make",
+            "do",
+          ],
+          "modal-763512": [
+            "have",
+            "take",
+            "had",
+            "took",
+            "take",
+            "have",
+            "had",
+            "had",
+            "take",
+            "took",
+          ],
+          "modal-972345": [
+            "said",
+            "speaking",
+            "told",
+            "say",
+            "spoke",
+            "talk",
+            "says",
+            "tell",
+            "talks",
+            "tell",
+          ],
+          "modal-748392": [
+            "looked",
+            "see",
+            "watching",
+            "skimmed",
+            "seen",
+            "staring",
+            "look",
+            "scanned",
+          ],
+          "modal-945621": [
+            "historical",
+            "efficient",
+            "economy",
+            "economical",
+            "historic",
+            "Economics",
+            "effective",
+            "economic",
+          ],
+          "modal-357928": [
+            "tour",
+            "voyage",
+            "travel",
+            "excursions",
+            "trip",
+            "outings",
+            "journey",
+            "cruise",
+          ],
+          "modal-836492": [
+            "ensure",
+            "effect",
+            "possession",
+            "make sure",
+            "ownership",
+            "affects",
+            "Property",
+            "insured",
+            "possessions",
+          ],
+          "modal-629473": [
+            "remember",
+            "accident",
+            "occasion",
+            "revision",
+            "occurrence",
+            "remind",
+            "incident",
+            "reviews",
+          ],
+          "modal-482639": [
+            "spend",
+            "cheque",
+            "change",
+            "wastes",
+            "lend",
+            "cash",
+            "receipts",
+            "Borrow",
+          ],
+          "modal-194827": [
+            "perks",
+            "crew",
+            "commission",
+            "staff",
+            "salary",
+            "team",
+            "bonuses",
+            "wage",
+          ],
+          "modal-384756": [
+            "electric",
+            "technology",
+            "techniques",
+            "eligible",
+            "technological",
+            "Electrical",
+            "technical",
+            "illegible",
+          ],
+          "modal-529374": [
+            "comfortable",
+            "vocals",
+            "convenient",
+            "pitch",
+            "classic",
+            "suitable",
+            "voice",
+            "classical",
+          ],
+          "modal-738942": [
+            "cast",
+            "viewer",
+            "been in",
+            "audience",
+            "denied",
+            "gone to",
+            "spectators",
+            "refused",
+            "been to",
+          ],
+          "modal-852391": [
+            "space",
+            "lonely",
+            "fits",
+            "alone",
+            "room",
+            "match",
+            "lone",
+            "suits",
+          ],
+
+          "modal-914762": [
+            "up",
+            "through",
+            "for",
+            "forward",
+            "out",
+            "up",
+            "after",
+            "at",
+          ],
+          "modal-627391": [
+            "out",
+            "on",
+            "up",
+            "into",
+            "over",
+            "off",
+            "to",
+            "down",
+          ],
+          "modal-582731": [
+            "over",
+            "with",
+            "on",
+            "in",
+            "out",
+            "into",
+            "on",
+            "off",
+          ],
+          "modal-739214": [
+            "together",
+            "up",
+            "back",
+            "forward",
+            "out of",
+            "into",
+            "up",
+            "on",
+          ],
+          "modal-485927": [
+            "in",
+            "up",
+            "behind",
+            "from",
+            "between",
+            "for",
+            "out",
+            "across",
+          ],
+          "modal-493820": [
+            "out",
+            "up",
+            "up",
+            "away",
+            "off",
+            "back",
+            "in",
+            "at",
+          ],
+          "modal-196473": [
+            "up",
+            "in",
+            "apart",
+            "off",
+            "to",
+            "up",
+            "up",
+            "after",
+          ],
+          "modal-839471": [
+            "off",
+            "on, off",
+            "around",
+            "back",
+            "to",
+            "on",
+            "in",
+            "around",
+          ],
+          "modal-204758": [
+            "at, with",
+            "over",
+            "out",
+            "up",
+            "into",
+            "in",
+            "away",
+            "over",
+          ],
+          "modal-374820": [
+            "up",
+            "into",
+            "on",
+            "down",
+            "out",
+            "away",
+            "in",
+            "out",
+          ],
+          "modal-592384": [
+            "without",
+            "on",
+            "up",
+            "with",
+            "out",
+            "with",
+            "up",
+            "away",
+          ],
+          "modal-485920": [
+            "up",
+            "off",
+            "out",
+            "up",
+            "into",
+            "down",
+            "off",
+            "up",
+          ],
+          "modal-731462": [
+            "out, down",
+            "up",
+            "at",
+            "on",
+            "off",
+            "off",
+            "to",
+            "Up",
+          ],
+          "modal-294861": [
+            "on",
+            "for",
+            "off",
+            "after",
+            "up",
+            "round",
+            "back",
+            "in",
+          ],
+          "modal-518279": [
+            "up",
+            "for",
+            "off",
+            "out",
+            "for",
+            "up",
+            "off",
+            "back",
+          ],
+        };
+
+        const correctAnswers = answers[modalId];
+        const inputs = document.querySelectorAll(`#${modalId} .input`);
+
+        inputs.forEach((input, index) => {
+          if (
+            input.value.trim().toUpperCase() !==
+            correctAnswers[index].toUpperCase()
+          ) {
+            input.classList.add("incorrect");
+            input.classList.remove("correct");
+          } else {
+            input.classList.add("correct");
+            input.classList.remove("incorrect");
+          }
+        });
+
+        const openButton = document.querySelector(
+          `.open-test[data-modal="${modalId}"]`,
+        );
+        openButton.classList.add("clicked");
+        saveButtonStates();
+      };
+    });
+
+    window.onclick = function (event) {
+      if (event.target.classList.contains("training-modal")) {
+        closeTest(event.target);
+      }
+    };
+
+    window.onload = restoreButtonStates;
+  </script>
+</html>

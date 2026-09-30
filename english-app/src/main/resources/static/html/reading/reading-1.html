@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Учебная страница по чтению</title>
+    <style>
+      ::selection {
+        background: #aeaeae;
+        color: #ffffff;
+      }
+      body {
+        -webkit-tap-highlight-color: rgba(17, 17, 17, 0.3);
+        font-family: "Poppins", sans-serif;
+        line-height: 1.5;
+        font-weight: 700;
+        margin: 15px;
+        background-color: #111111;
+        color: #ffffff;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      p {
+        margin-bottom: 10px;
+        color: #aeaeae;
+      }
+      strong {
+        font-weight: 800;
+      }
+      span {
+        line-height: 1.9;
+      }
+      button {
+        font-family: "Poppins", sans-serif;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #ff8000;
+        border-radius: 5px;
+        border: 0;
+        height: 35px;
+        width: 170px;
+        margin-top: 15px;
+        transition: all 150ms;
+      }
+      button:active {
+        opacity: 0.3;
+      }
+      button.clicked {
+        background-color: #363636;
+        color: #4e5053;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container img {
+        max-width: 100%;
+        cursor: pointer;
+      }
+      .modal {
+        justify-content: center;
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        overflow: auto;
+      }
+      .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 80%;
+      }
+      .highlight {
+        background-color: #ff8000;
+        color: #ffffff;
+        padding-right: 25px;
+        padding-left: 25px;
+        border-radius: 5px;
+      }
+      /*эти стили для подчеркивания*/
+      .input-line {
+        background-color: #111111;
+        padding-right: 75px;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .one-line {
+        border-bottom: 1px solid #ff8000;
+      }
+      .two-line {
+        position: relative;
+        border-bottom: 3px double #ff8000;
+      }
+      /*эти стили для подчеркивания*/
+      .training-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .training-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #333333;
+        margin: auto;
+        border-radius: 20px;
+        padding: 10px;
+        max-width: 90%;
+      }
+      .check-answer {
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+      .input {
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        margin-bottom: 1px;
+        font-weight: 700;
+        font-size: 16px;
+        width: 70px;
+        border: none;
+        outline: none;
+        color: #aeaeae;
+        background-color: #333333;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .input.correct {
+        border-color: green;
+      }
+      .input.incorrect {
+        border-color: red;
+      }
+      .tooltip-text {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        color: #ff8000;
+        cursor: pointer;
+        transition: all 150ms;
+      }
+      .tooltip-text:active {
+        color: rgba(255, 128, 0, 0.31);
+      }
+      .hint-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .hint-content {
+        background-color: #333333;
+        color: #ffffff;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        max-height: 50%;
+        overflow-y: auto;
+        text-align: left;
+      }
+      .hint-content p {
+        margin-bottom: 16px;
+      }
+      .hint-content strong {
+        color: #ffffff;
+      }
+      .question-mark {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        transition: all 200ms;
+        right: 15px;
+        margin-top: 15px;
+        filter: drop-shadow(0 0 0.3rem #ff8000);
+      }
+      .question-mark:active {
+        filter: drop-shadow(0 0 0.5rem #ff8000);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      Задания 10 <br />
+      Алгоритм работы
+    </h1>
+
+    <p>
+      1. Внимательно прочитай заголовки
+      <br />
+      <br />
+      2. Прочитай тексты, подчеркни ключевые слова, на которые делается акцент и
+      которые отличают этот текст от других
+      <br />
+      <br />
+      Например
+    </p>
+    <p>
+      1. Watching predators and prey
+      <br />
+      2. Hot water, cold air
+      <br />
+      3. How locals live and entertain
+      <br />
+      4. Impressive but difficult to reach
+      <br />
+      5. For the strong and adventurous
+      <br />
+      6. Nature and activities to enjoy
+      <br />
+      7. Conquering cold waves
+      <br />
+      8. Closer to wildlife
+    </p>
+    <p>
+      A. At the edge of Russia, on the Pacific Ocean, there is the distinctive
+      Kamchatka peninsula, famous for its
+      <span class="one-line">rich natural diversity</span>. This land is
+      surrounded by rough <span class="one-line">ocean waters</span>, in the
+      interior lie fiery <span class="one-line">volcanoes</span> and boiling,
+      steaming <span class="one-line">geysers</span>. Some 300 volcanoes, 29 of
+      which are active, make up nearly 40% of the peninsula. But Kamchatka's
+      landscapes and natural diversity are not the only things to attract the
+      travellers from far and wide: the area is also rich in
+      <span class="one-line">opportunities for extreme</span> sports. Make your
+      adventures in Kamchatka unforgettable. <br /><br />
+      B. Surfing in Bali is no big deal these days: the hot sun, the warm ocean,
+      coconuts, bananas… We've seen it all! How about surfing in the
+      <span class="one-line">chilly waters</span> of the Pacific in Kamchatka?
+      One of Kamchatka's best surf destinations is Khalaktyrsky beach. You can
+      catch waves here almost all year long: the hardiest of surfers are ready
+      to <span class="one-line">jump in in sub-zero temperatures</span>.
+      Naturally, the best time to surf is summer when surf schools and equipment
+      rental places are open for business. You
+      <span class="one-line">don't feel the cold in a wetsuit</span>!
+      <br /><br />
+      C. The Kamchatka peninsula is washed by the Pacific Ocean and the Bering
+      Sea to the northeast and by the Sea of Okhotsk to the west. One of the
+      best ways to explore the rugged coastline is to take a long trip by kayak.
+      On the water, you'll find yourself
+      <span class="one-line">face to face with wild nature</span>: you can get
+      acquainted with
+      <span class="one-line"
+        >sea lions, seals, killer whales and other sea creatures</span
+      >, and see the most
+      <span class="one-line"
+        >beautiful, secluded bays, islands, headlands and lakes inland</span
+      >. You're going to be taking numerous pictures of the seals and sea lions
+      as they bask in the sun. <br /><br />
+      D. With vast numbers of fish, it is no wonder that Lake Kuril attracts
+      over 200 Kamchatka
+      <span class="one-line">brown bears who visit the lake to fish</span>.
+      Across the whole peninsula, there are around 20,000 bears altogether -
+      that's one bear to every 15 human inhabitants. Over the years, the animals
+      on Lake Kuril have adapted to life alongside humans. Therefore,
+      <span class="one-line"
+        >you can observe the bears and their prey close up</span
+      >
+      as they show no signs of aggression. An experienced guide knows exactly
+      where to observe them to make your adventure absolutely safe. <br /><br />
+      E. Discovered as recently as 1941, the Valley of Geysers in the Kronotsky
+      Reserve in Kamchatka
+      <span class="one-line"
+        >is one of the world's largest geyser fields and is the only one in
+        Eurasia</span
+      >. In a cramped 8 square kilometer piece of land there are over
+      <span class="one-line">40 powerful spouting geysers</span>, not to mention
+      hot springs, mud pools, thermal sites, waterfalls, all surrounded by
+      volcanoes. As dangerous as any of these places seem, there are special
+      paths for travellers. You
+      <span class="one-line">can only get to the valley by air</span>, so take a
+      helicopter tour and face the raw power of Mother Nature. <br /><br />
+      F. If you feel comfortable on the runs at Alpine resorts and consider
+      yourself experienced, Kamchatka will surprise you: imagine skiing down the
+      slopes of an active volcano with breathtaking views over the Pacific! This
+      is no fantasy: we suggest
+      <span class="one-line">experienced riders try heli-skiing</span>! Fly to
+      the highest volcanoes' peaks by helicopter, then enjoy the buzz of skiing
+      the untouched slopes with awesome views of the not-so-distant Pacific.
+      Such an activity requires skiers to be in
+      <span class="one-line">great shape physically</span>, and to have the love
+      <span class="one-line">of an adrenaline rush</span>. <br /><br />
+      G. Kamchatka is a very harsh place to live, yet
+      <span class="one-line">people</span> have
+      <span class="one-line">lived here</span> for
+      <span class="one-line">centuries</span>. In order to survive, they had to
+      learn to live in harmony with nature. That led to the development of
+      rituals that are still performed. When you visit, you can see how the
+      indigenous <span class="one-line">people</span> of Kamchatka
+      <span class="one-line">have been living for generations</span> in the
+      village of Pimchakh that is open to visitors. Shortage of snow is never an
+      issue, so the
+      <span class="one-line"
+        >locals happily indulge in competitive and recreational dog sled
+        races</span
+      >. You should certainly put a short dog sled trip on your bucket list.
+    </p>
+    <p>Ответ:</p>
+    <div class="container">
+      <img src="https://svgshare.com/i/1AAP.svg" alt="table" />
+    </div>
+    <p>
+      3. Пробеги взглядом выделенные слова и выражения в текстах. Подумай, как
+      можно озаглавить каждый
+      <br />
+      <br />
+      4. Сопоставь названия и тексты
+      <br />
+      <br />
+      5. Убедись, что оставшееся утверждение никуда не подходит
+    </p>
+
+    <div id="modal" class="modal" onclick="closeModal()">
+      <img src="" id="modal-image" class="modal-content" alt="modal content" />
+    </div>
+
+    <script>
+      // открытие модального окна с тестом
+      function openTest(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+      }
+      // закрытие модального окна с тестом
+      function closeTest(modal) {
+        modal.style.display = "none";
+      }
+
+      // добавляет событие открытия модального окна для каждой кнопки
+      document.querySelectorAll(".open-test").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          openTest(modalId);
+        };
+      });
+
+      // после нажатия по кнопке, кнопка становится серой и это записывается в localstorage
+      function saveButtonStates() {
+        const states = [];
+        document.querySelectorAll(".open-test").forEach((button) => {
+          if (button.classList.contains("clicked")) {
+            states.push(button.id);
+          }
+        });
+        localStorage.setItem("clickedButtons", JSON.stringify(states));
+      }
+
+      // ддостает из localstorage закрашеные в серый кнопки
+      function restoreButtonStates() {
+        const savedStates =
+          JSON.parse(localStorage.getItem("clickedButtons")) || [];
+        savedStates.forEach((buttonId) => {
+          const button = document.getElementById(buttonId);
+          if (button) {
+            button.classList.add("clicked");
+          }
+        });
+      }
+
+      // добавляет событие проверки ответов! и покраски в другой цвет в случае не правильности
+      document.querySelectorAll(".check-answer").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          const answers = {
+            "modal-2": ["FIRST", "TWENTIETH"],
+          };
+
+          const correctAnswers = answers[modalId];
+          const inputs = document.querySelectorAll(`#${modalId} .input`);
+
+          inputs.forEach((input, index) => {
+            if (input.value.trim().toUpperCase() !== correctAnswers[index]) {
+              input.classList.add("incorrect");
+              input.classList.remove("correct");
+            } else {
+              input.classList.add("correct");
+              input.classList.remove("incorrect");
+            }
+          });
+
+          const openButton = document.querySelector(
+            `.open-test[data-modal="${modalId}"]`,
+          );
+          openButton.classList.add("clicked");
+          saveButtonStates();
+        };
+      });
+
+      // закрывает модальное окно если нажать мимо него
+      window.onclick = function (event) {
+        if (event.target.classList.contains("training-modal")) {
+          closeTest(event.target);
+        }
+      };
+
+      // открывает модальное окно с таблице svg
+      function openModal(imageElement) {
+        let modal = document.getElementById("modal");
+        let modalImg = document.getElementById("modal-image");
+
+        modal.style.display = "flex";
+        modalImg.src = imageElement.src;
+      }
+
+      // функция для закрытия модального окна с изображением таблицы svg
+      function closeModal() {
+        let modal = document.getElementById("modal");
+        modal.style.display = "none";
+      }
+
+      // функция для открытия модального окна с подсказкой
+      function openHint(hintId) {
+        document.getElementById(hintId).style.display = "flex";
+      }
+
+      // Функция для закрытия подсказки
+      function closeHint(hintId) {
+        document.getElementById(hintId).style.display = "none";
+      }
+
+      // Добавляем обработчик для каждого текста с подсказкой
+      document.querySelectorAll(".tooltip-text").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      // обработчик для совета по кнопочке
+      document.querySelectorAll(".question-mark").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      // достает закрашеные кнопки )
+      window.onload = restoreButtonStates;
+    </script>
+  </body>
+</html>

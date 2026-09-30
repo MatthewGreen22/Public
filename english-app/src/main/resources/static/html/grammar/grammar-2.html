@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Учебная страница по грамматике</title>
+    <style>
+      ::selection {
+        background: #aeaeae;
+        color: #ffffff;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        -webkit-tap-highlight-color: rgba(17, 17, 17, 0.3);
+        font-family: "Poppins", sans-serif;
+        line-height: 1.5;
+        font-weight: 700;
+        margin: 15px;
+        background-color: #111111;
+        color: #ffffff;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      p {
+        margin-bottom: 10px;
+        color: #aeaeae;
+      }
+      strong {
+        font-weight: 800;
+      }
+      span {
+        line-height: 1.9;
+      }
+      button {
+        font-family: "Poppins", sans-serif;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #ff8000;
+        border-radius: 5px;
+        border: 0;
+        height: 35px;
+        width: 170px;
+        margin-top: 15px;
+        transition: all 150ms;
+      }
+      button:active {
+        opacity: 0.3;
+      }
+      button.clicked {
+        background-color: #363636;
+        color: #4e5053;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .container img {
+        max-width: 100%;
+        cursor: pointer;
+      }
+      .modal {
+        justify-content: center;
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        overflow: auto;
+      }
+      .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 80%;
+      }
+      .highlight {
+        background-color: #ff8000;
+        color: #ffffff;
+        padding-right: 25px;
+        padding-left: 25px;
+        border-radius: 5px;
+      }
+      .input-line {
+        background-color: #111111;
+        padding-right: 75px;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .one-line {
+        border-bottom: 1px solid #ff8000;
+      }
+      .two-line {
+        position: relative;
+        border-bottom: 3px double #ff8000;
+      }
+      .training-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .training-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #333333;
+        margin: auto;
+        border-radius: 20px;
+        padding: 10px;
+        max-width: 90%;
+        max-height: 80%;
+        overflow-y: auto;
+      }
+      .check-answer {
+        min-height: 35px;
+        min-width: 170px;
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+      .input {
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        margin-bottom: 1px;
+        font-weight: 700;
+        font-size: 16px;
+        width: 120px;
+        border: none;
+        outline: none;
+        color: #aeaeae;
+        background-color: #333333;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .input.correct {
+        border-color: green;
+      }
+      .input.incorrect {
+        border-color: red;
+      }
+      .tooltip-text {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        color: #ff8000;
+        cursor: pointer;
+        transition: all 150ms;
+      }
+      .tooltip-text:active {
+        color: rgba(255, 128, 0, 0.31);
+      }
+      .hint-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .hint-content {
+        background-color: #333333;
+        color: #ffffff;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        max-height: 85%;
+        overflow-y: auto;
+        text-align: left;
+      }
+      .hint-content p {
+        margin-bottom: 16px;
+      }
+      .hint-content strong {
+        color: #ffffff;
+      }
+      .question-mark {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        transition: all 200ms;
+        right: 15px;
+        margin-top: 15px;
+        filter: drop-shadow(0 0 0.3rem #ff8000);
+      }
+      .question-mark:active {
+        filter: drop-shadow(0 0 0.5rem #ff8000);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      Задания 25-29 <br />
+      Алгоритм работы
+    </h1>
+    <p>
+      Суть задания – <strong>изменить часть речи</strong> предоставленного
+      слова, добавляя приставки и суффиксы к корню, например,
+      <br />
+      <br />
+      Personal – personality; личный – личность
+      <br />
+      <br />
+      Usual – usually; обычный – обычно
+      <br />
+      <br />
+      Power – powerful; власть/сила – влиятельный/сильный
+      <br />
+      <br />
+      <strong>Но</strong> не всегда стоит менять часть речи, иногда стоит
+      добавить приставку
+      <br />
+      <br />
+      Legal – illegal, possible – impossible, print – reprint
+    </p>
+    <p>
+      1. Подчеркни грамматическую основу
+      <br />
+      <br />
+      2. Определи часть речи пропущенного слова
+    </p>
+    <p>
+      However, his <span class="one-line">heart</span>
+      <span class="two-line">was not really in it</span>. In 1850 Sechenov
+      <span class="two-line">entered</span> Moscow Medical University with a
+      full <span class="input-line">&nbsp;</span> of the goals of his life.
+      <span class="highlight">AWARE</span>
+    </p>
+    <p>
+      3. Перед пропуском стоит прилагательное, а после “of” – значит пропущено
+      существительное
+      <br />
+      <br />
+      4. В данном случае AWARE + NESS = AWARENESS
+    </p>
+
+    <h2>Если пропущено существительное</h2>
+    <p>
+      <strong>Существительное может стоять:</strong>
+      <br />
+      <br />
+      <strong>В самом начале предложения перед сказуемым</strong> (<strong
+        >RUDENESS</strong
+      >
+      is a sign of bad character. RUDE)
+      <br />
+      <br />
+      <strong>После прилагательного</strong> (She has a very pleasant
+      <strong>PERSONALITY</strong>. PERSONAL)
+      <br />
+      <br />
+      <strong>После существительного в притяжательном падеже</strong> (This is
+      everyone’s <strong>RESPONSIBILITY</strong>. RESPONSIBLE)
+      <br />
+      <br />
+      <strong>После артикля</strong> (I love autumn because of the
+      <strong>RICHNESS</strong> of its colour. RICH).
+      <br />
+      <br />
+      <strong>После предлога</strong> (People complain about the lack of
+      <strong>CREATIVITY</strong>. CREATIVE)
+      <br />
+      <br />
+      <strong>После местоимения</strong> (I love her <strong>BEAUTY</strong>.
+      BEAUTIFUL)
+      <br />
+      <br />
+      <strong>После числительного</strong> (There were more than 1000
+      <strong>COMPETITORS</strong>. COMPETE)
+    </p>
+    <p>Таблица словообразования существительных</p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19zF.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <p>Обязательно убедись в каком числе стоит существительное</p>
+    <div class="container">
+      <button class="open-test" data-modal="modal-6451" id="test-6451">
+        Go check yourself !
+      </button>
+    </div>
+
+    <h2>Если пропущено прилагательное</h2>
+    <p>
+      Прилагательное может стоять если:
+      <br />
+      <br />
+      <strong
+        >Перед пропуском стоит артикль "a" или "the", а после пропуска
+        существительное</strong
+      >
+      (It was a <strong>DIFFICULT</strong> road. DIFFICULTY),
+      <br />
+      <br />
+      <strong>После другого прилагательного, перед существительным</strong> (My
+      brother likes wearing big <strong>BAGGY</strong> trousers. BAG),
+      <br />
+      <br />
+      <strong
+        >Часть составного именного сказуемого после глагола-связки быть
+      </strong>
+      (It was absoutely <strong>TASTELESS</strong>. TASTE) или после другого
+      глагола (The food looks <strong>TASTY</strong>. TASTE);
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/1A0N.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <p>
+      <strong
+        >Прилагательные с cуффиксами –ful пишутся с одной “l”: colourful,
+        beautiful, useful</strong
+      >
+    </p>
+    <div class="container">
+      <button class="open-test" data-modal="modal-958152" id="test-958152">
+        Go check yourself !
+      </button>
+    </div>
+
+    <h2>Если пропущено наречие</h2>
+    <p>
+      <strong>Наречие может стоять:</strong>
+      <br />
+      <br />
+      <strong>После глагола/перед глаголом</strong> (We arrived
+      <strong>SAFELY</strong> on the shore./We <strong>REALLY</strong> like our
+      classroom. SAFE)
+      <br />
+      <br />
+      <strong>В начале предложения как вводное слово</strong>
+      (<strong>OBVIOUSLY</strong>, we were lost. OBVIOUS)
+      <br />
+      <br />
+      <strong>Перед прилагательным</strong> (He was
+      <strong>ABSOLUTELY</strong> right. ABSOLUTE)
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19zW.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <p>
+      Если слово заканчивается на “l” - мы просто добавляем суффикс “-ly”
+      <br />
+      <br />
+      Beautiful - beautifully, final – finally, actual - actually
+      <br />
+      <br />
+      Обязательно проверь нужна ли степень сравнения, если нужна, то
+      сравнительная или превосходная
+    </p>
+    <div class="container">
+      <button class="open-test" data-modal="modal-123009" id="test-123009">
+        Go check yourself !
+      </button>
+    </div>
+
+    <h2>Если пропущен глагол</h2>
+    <p>
+      <strong>Глагол может стоять:</strong>
+      <br />
+      <br />
+      <strong
+        >за существительным/ личным местоимением в роли подлежащего в начале
+        предложения</strong
+      >(They <strong>SPECIALISE</strong> in different aspects of the building’s
+      history . SPECIAL),
+      <br />
+      <br />
+      <strong>в начале повелительного предложения</strong> (Let’s
+      <strong>SUMMARISE</strong> and make a conclusion. SUMMARY),
+      <br />
+      <br />
+      <strong>после вспомогательного глагола</strong> (We will
+      <strong>REALISE</strong> all your dreams. REAL),
+      <br />
+      <br />
+      <strong>после частицы “to”</strong> (We are going to
+      <strong>FULLFILL</strong> it. FULFILLMENT).
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19zN.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <div class="container">
+      <button class="open-test" data-modal="modal-54376" id="test-54376">
+        Go check yourself !
+      </button>
+    </div>
+    <p></p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/1A5L.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+
+    <div class="training-modal" id="modal-6451">
+      <div class="training-content">
+        <p>
+          Other activities of the Carnival of Venice include various concerts,
+          different types of street <input type="text" class="input" /> and even
+          an unforgettable candle-lit boat parade.
+          <span class="highlight">PERFORM</span>
+        </p>
+        <p>
+          I was planning a career in biology but was not looking forward to
+          taking chemistry in my first year at Carleton University in Ottawa.
+          However, the professor of chemistry was a famous
+          <input type="text" class="input" />.
+          <span class="highlight">SCIENCE</span>
+        </p>
+        <p>
+          How has London 2012 changed the sporting map of the world? The United
+          States won the highest number of gold medals and the most medals in
+          total, with China dropping to second place on the medals table after
+          unprecedented <input type="text" class="input" /> at their home
+          Olympics in Beijing four years ago.
+          <span class="highlight">DOMINATE</span>
+        </p>
+        <p>
+          Have you ever wondered how the most famous inventions were created?
+          From the <input type="text" class="input" /> of time, humans
+          everywhere have been inventing.
+          <span class="highlight">BEGIN</span>
+        </p>
+        <p>
+          Before phones, computers, and telegraphs were invented, messages would
+          take months or even years to reach their destination. Samuel Morse was
+          born in Charlestown, Massachusetts, in April 1791, not knowing that he
+          would be a famous <input type="text" class="input" />.
+          <span class="highlight">INVENT</span>
+        </p>
+        <button class="check-answer" data-modal="modal-6451">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="training-modal" id="modal-958152">
+      <div class="training-content">
+        <p>
+          Nowadays most of us go to our computers to connect with friends
+          instead of using our phones. Cyberspace relationships have become the
+          norm for many people, even the most
+          <input type="text" class="input" /> ones.
+          <span class="highlight">CONSERVE</span>
+        </p>
+        <p>
+          This is certainly the greatest Games for Britain in more than a
+          century, and realistically the greatest ever. The British were more
+          <input type="text" class="input" /> only once in 1908, in London, when
+          a third of all the competitors were from the UK.
+          <span class="highlight">SUCCESS</span>
+        </p>
+        <p>
+          Ivan Sechenov was an outstanding Russian scientist. He was born in
+          1829 in a noble family. His parents inspired young Ivan to continue
+          his education throughout his entire life, and the boy followed their
+          advice. At the age of 14 he chose to become a military engineer and
+          studied <input type="text" class="input" /> technical subjects.
+          <span class="highlight">VARY</span>
+        </p>
+        <p>
+          Bangkok is the capital and the most populous city of Thailand. This
+          <input type="text" class="input" /> metropolis is also one of the most
+          traveller-friendly cities in Asia. Bangkok was not the first capital
+          of Thailand; in fact, it has taken that role comparatively not long
+          ago.
+          <span class="highlight">TROPIC</span>
+        </p>
+        <button class="check-answer" data-modal="modal-958152">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="training-modal" id="modal-123009">
+      <div class="training-content">
+        <p>
+          Have you ever felt like jumping out of a plane? Plenty of people have,
+          but <input type="text" class="input" /> most of them did it after
+          parachutes had been invented.
+          <span class="highlight">THANKFUL</span>
+        </p>
+        <p>
+          Cartoon animation has a long history. A cartoon is made by drawing
+          many pictures and showing them one after another so quickly that the
+          pictures <input type="text" class="input" /> seem to move. The most
+          prominent of animated cartoons were made by Walt Disney.
+          <span class="highlight">FINAL</span>
+        </p>
+        <p>
+          The Vancouver Aquarium is a public aquarium. It is
+          <input type="text" class="input" />
+          located in Stanley Park, a popular area.
+          <span class="highlight">CONVENIENT</span>
+        </p>
+        <p>
+          Canada can boast of many sights. Capilano Suspension Bridge is
+          <input type="text" class="input" /> one of them.
+          <span class="highlight">CERTAIN</span>
+        </p>
+        <button class="check-answer" data-modal="modal-123009">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div class="training-modal" id="modal-54376">
+      <div class="training-content">
+        <p>
+          Then the British decided to <input type="text" class="input" /> this
+          place during the 1858 Fraser Canyon Gold Rush.
+          <span class="highlight">COLONY</span>
+        </p>
+        <p>
+          We need to <input type="text" class="input" /> our schemes as they are
+          difficult to read.
+          <span class="highlight">SIMPLE</span>
+        </p>
+        <p>
+          These economic and social policy reforms will further
+          <input type="text" class="input" /> the gaps between the haves and the
+          have-nots.
+          <span class="highlight">WIDE</span>
+        </p>
+        <button class="check-answer" data-modal="modal-54376">
+          Check your answers
+        </button>
+      </div>
+    </div>
+
+    <div id="modal" class="modal" onclick="closeModal()">
+      <img src="" id="modal-image" class="modal-content" alt="modal content" />
+    </div>
+    <script>
+      function openTest(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+      }
+
+      function closeTest(modal) {
+        modal.style.display = "none";
+      }
+
+      document.querySelectorAll(".open-test").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          openTest(modalId);
+        };
+      });
+
+      function saveButtonStates() {
+        const states = [];
+        document.querySelectorAll(".open-test").forEach((button) => {
+          if (button.classList.contains("clicked")) {
+            states.push(button.id);
+          }
+        });
+        localStorage.setItem("clickedButtons", JSON.stringify(states));
+      }
+
+      function restoreButtonStates() {
+        const savedStates =
+          JSON.parse(localStorage.getItem("clickedButtons")) || [];
+        savedStates.forEach((buttonId) => {
+          const button = document.getElementById(buttonId);
+          if (button) {
+            button.classList.add("clicked");
+          }
+        });
+      }
+
+      document.querySelectorAll(".check-answer").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          const answers = {
+            "modal-6451": [
+              "PERFORMANCES",
+              "SCIENTIST",
+              "DOMINANCE",
+              "BEGINNING",
+              "INVENTOR",
+            ],
+            "modal-958152": [
+              "CONSERVATIVE",
+              "SUCCESSFUL",
+              "VARIOUS",
+              "TROPICAL",
+            ],
+            "modal-123009": [
+              "THANKFULLY",
+              "FINALLY",
+              "CONVENIENTLY",
+              "CERTAINLY",
+            ],
+            "modal-54376": ["COLONISE", "SIMPLIFY", "WIDEN"],
+          };
+
+          const correctAnswers = answers[modalId];
+          const inputs = document.querySelectorAll(`#${modalId} .input`);
+
+          inputs.forEach((input, index) => {
+            if (input.value.trim().toUpperCase() !== correctAnswers[index]) {
+              input.classList.add("incorrect");
+              input.classList.remove("correct");
+            } else {
+              input.classList.add("correct");
+              input.classList.remove("incorrect");
+            }
+          });
+
+          const openButton = document.querySelector(
+            `.open-test[data-modal="${modalId}"]`,
+          );
+          openButton.classList.add("clicked");
+          saveButtonStates();
+        };
+      });
+
+      window.onclick = function (event) {
+        if (event.target.classList.contains("training-modal")) {
+          closeTest(event.target);
+        }
+      };
+
+      function openModal(imageElement) {
+        let modal = document.getElementById("modal");
+        let modalImg = document.getElementById("modal-image");
+
+        modal.style.display = "flex";
+        modalImg.src = imageElement.src;
+      }
+
+      function closeModal() {
+        let modal = document.getElementById("modal");
+        modal.style.display = "none";
+      }
+
+      document.querySelectorAll(".question-mark").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      function openHint(hintId) {
+        document.getElementById(hintId).style.display = "flex";
+      }
+
+      function closeHint(hintId) {
+        document.getElementById(hintId).style.display = "none";
+      }
+
+      window.onload = restoreButtonStates;
+    </script>
+  </body>
+</html>

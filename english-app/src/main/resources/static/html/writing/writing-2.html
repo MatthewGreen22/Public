@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Учебная страница по аудированию</title>
+    <style>
+      ::selection {
+        background: #aeaeae;
+        color: #ffffff;
+      }
+      body {
+        -webkit-tap-highlight-color: rgba(17, 17, 17, 0.3);
+        font-family: "Poppins", sans-serif;
+        line-height: 1.5;
+        font-weight: 700;
+        margin: 15px;
+        background-color: #111111;
+        color: #ffffff;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      p {
+        margin-bottom: 10px;
+        color: #aeaeae;
+      }
+      strong {
+        font-weight: 800;
+      }
+      span {
+        line-height: 1.9;
+      }
+      button {
+        font-family: "Poppins", sans-serif;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #ff8000;
+        border-radius: 5px;
+        border: 0;
+        height: 35px;
+        width: 170px;
+        margin-top: 15px;
+        transition: all 150ms;
+      }
+      button:active {
+        opacity: 0.3;
+      }
+      button.clicked {
+        background-color: #363636;
+        color: #4e5053;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container img {
+        max-width: 100%;
+        cursor: pointer;
+      }
+      .modal {
+        justify-content: center;
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        overflow: auto;
+      }
+      .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 80%;
+      }
+      .highlight {
+        background-color: #ff8000;
+        color: #ffffff;
+        padding-right: 25px;
+        padding-left: 25px;
+        border-radius: 5px;
+      }
+      /*эти стили для подчеркивания*/
+      .input-line {
+        background-color: #111111;
+        padding-right: 75px;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .one-line {
+        border-bottom: 1px solid #ff8000;
+      }
+      .two-line {
+        position: relative;
+        border-bottom: 3px double #ff8000;
+      }
+      /*эти стили для подчеркивания*/
+      .training-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .training-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #333333;
+        margin: auto;
+        border-radius: 20px;
+        padding: 10px;
+        max-width: 90%;
+      }
+      .check-answer {
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+      .input {
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        margin-bottom: 1px;
+        font-weight: 700;
+        font-size: 16px;
+        width: 70px;
+        border: none;
+        outline: none;
+        color: #aeaeae;
+        background-color: #333333;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .input.correct {
+        border-color: green;
+      }
+      .input.incorrect {
+        border-color: red;
+      }
+      .tooltip-text {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        color: #ff8000;
+        cursor: pointer;
+        transition: all 150ms;
+      }
+      .tooltip-text:active {
+        color: rgba(255, 128, 0, 0.31);
+      }
+      .hint-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .hint-content {
+        background-color: #333333;
+        color: #ffffff;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        max-height: 50%;
+        overflow-y: auto;
+        text-align: left;
+      }
+      .hint-content p {
+        margin-bottom: 16px;
+      }
+      .hint-content strong {
+        color: #ffffff;
+      }
+      .question-mark {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        transition: all 200ms;
+        right: 15px;
+        margin-top: 15px;
+        filter: drop-shadow(0 0 0.3rem #ff8000);
+      }
+      .question-mark:active {
+        filter: drop-shadow(0 0 0.5rem #ff8000);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- главный заголовок -->
+    <h1>
+      Задания 38.1-38.2 <br />
+      Алгоритм работы
+    </h1>
+
+    <p>
+      Здесь тебе дают выбор. Тебе следует выбрать одно из двух заданий. Оба
+      варианта – проекты, отличие проектов в темах и видах предоставленной
+      информации, таблица или круговая диаграмма
+      <br />
+      <br />
+      В отличие от задания 37, это задание стоит распланировать и написать на
+      черновике
+      <br />
+      <br />
+      В этом задании тебе очень полезно знать критерии оценивания и что они
+      подразумевают:
+    </p>
+
+    <h4>• К1 – Решение коммуникативной задачи</h4>
+    <p>
+      o Вступление соответствует предложенной теме проектной работы
+      <br />
+      <br />
+      o 2-3 факта из данных в таблице приведены
+      <br />
+      <br />
+      o 1-2 существенных сравнения даны и прокомментированы
+      <br />
+      <br />
+      o Возможная проблема обозначена, и её решение предложено
+      <br />
+      <br />
+      o Мнение автора в заключении выражено и обосновано
+      <br />
+      <br />
+      o Стилевое оформление выбрано правильно: соблюдается нейтральный стиль
+    </p>
+
+    <h4>• К2 – Организация текста</h4>
+    <p>
+      o Логичность
+      <br />
+      <br />
+      o Деление на абзацы – 5 абзацев, не больше и не меньше
+      <br />
+      <br />
+      o Использование средств логической связи – вводные конструкции,
+      слова-связки
+    </p>
+
+    <h4>• К3 – Лексика</h4>
+    <p>
+      o Используемый словарный запас соответствует высокому уровню сложности
+      задания, практически нет нарушений в использовании лексики (допускается 1
+      лексическая ошибка)
+    </p>
+
+    <h4>• К4 – Грамматика</h4>
+    <p>
+      o Используемые грамматические средства соответствуют высокому уровню
+      сложности задания, нарушений практически нет (допускаются 1-2
+      неповторяющиеся грамматические ошибки) – например, если у тебя одинаковые
+      грамматические ошибки в трех предложениях, то они будут считаться за одну,
+      т.к. ошибка одинаковая
+    </p>
+
+    <h4>• К5 – Орфография и пунктуация</h4>
+    <p>
+      o Орфографические ошибки практически отсутствуют.
+      <br />
+      <br />
+      o Текст разделён на предложения с правильным пунктуационным оформлением
+      (допускается 1 орфографическая И/ИЛИ 1 пунктуационная ошибка) – то есть
+    </p>
+
+    <p>
+      Количество слов, с учетом отклонения в 10 процентов - 180-275 слов
+      <br />
+      <br />
+      План проекта-эссе написан в КИМах
+      <br />
+      <br />
+      Use the following plan:
+      <br />
+      <br />
+      – make an opening statement on the subject of the project;
+      <br />
+      <br />
+      – select and report 2–3 facts; нужно выбрать 2 - 3 факта из
+      таблицы/диаграммы и привести их в своем эссе
+      <br />
+      <br />
+      – make 1–2 comparisons where relevant and give your comments; выбрать 1 -
+      2 показателя из таблицы и сравнить их, если это подходит теме эссе
+      <br />
+      <br />
+      – outline a problem that can arise with
+      <span class="one-line">тема из заголовка таблицы/диаграммы</span> and
+      suggest a way of solving it; сформулировать проблему, которая может
+      возникнуть с
+      <span class="one-line">тема из заголовка таблицы/диаграммы</span> и
+      предложить решение
+      <br />
+      <br />
+      – conclude by giving and explaining your opinion on
+      <span class="one-line">тема из заголовка таблицы/диаграммы</span>. Сделать
+      заключение и объяснить свою точку зрения насчет тезиса в этом пункте.
+      Можно согласиться или не согласиться, и обязательно указать почему
+    </p>
+
+    <h2>Полезные клише по абзацам</h2>
+    <p>
+      Это задание повышенной сложности, эксперты-проверяющие ждут от тебя
+      сложных грамматических конструкций, используй Passive, Complex Subject
+      (сложное подлежащее), Complex Object (сложное дополнение)
+    </p>
+
+    <h4>1-й абзац – вступление:</h4>
+    <p>
+      Обязательно нужны: вводная фраза; информация, что именно ты работаешь над
+      проектом; ты взял/взяла информацию не с потолка, а из таблицы/диаграммы;
+      указать страну – Zetland; целевая аудитория респондентов, например,
+      teenagers
+      <br />
+      <br />
+      It is common knowledge that… - всем известно, что…
+      <br />
+      <br />
+      The project I am currently working on is aimed at finding out… - проект,
+      над которым я сейчас работаю нацелен на
+      <br />
+      <br />
+      I have found a table/pie chart, containing the results of the opinion
+      polls, which I am going to analyse and express my opinion on the matter –
+      Я нашел/нашла таблицу/круговую диаграмму, содержащую результаты опросов
+      общественного мнения, которые я собираюсь проанализировать и высказать
+      свое мнение по этому вопросу
+    </p>
+
+    <h4>2-й абзац – упомянуть 2-3 факта из таблицы/диаграммы:</h4>
+    <p>
+      According to the table/pie chart, … - согласно таблице/диаграмме…
+      <br />
+      <br />
+      The majority of the respondents ( %)… – большинство опрошенных ( %)…
+      обязательно укажи процент цифрами
+      <br />
+      <br />
+      The above-mentioned activity/opinion/reason/… is followed by… - за
+      вышеупомянутой активностью/мнением/причиной/… следует…
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19ov.svg"
+        alt="question-mark"
+        class="question-mark"
+        data-hint="hint-1"
+      />
+    </div>
+
+    <h4>3-й абзац – 1 - 2 существенных сравнения с комментариями</h4>
+    <p>
+      The analysis of the data shows that… - Анализ полученных данных
+      показывает, что…
+      <br />
+      <br />
+      Используй сравнительную конструкцию: X is almost two/three times as
+      popular as Y
+      <br />
+      <br />
+      Почему онлайн изучение популярнее – предположение (удобство, интерактив)
+      <br />
+      <br />
+      Почему НЕ предпочитают менее популярную опцию
+    </p>
+
+    <h4>4-й абзац – обозначить проблему и предложить решение</h4>
+    <p>
+      Unfortunately, there is a pressing problem that can arise with
+      <span class="one-line">тема из четвертого пункта плана</span> – к
+      сожалению, может возникнуть острая проблема с …
+      <br />
+      <br />
+      This issue can be solved by + Ving - Эта проблема может быть решена с
+      помощью
+    </p>
+
+    <h4>5-й абзац – заключение; выразить и объяснить свое мнение</h4>
+    <p>
+      In conclusion, I am convinced that … because … - В заключение я убежден,
+      что… потому что…
+      <br />
+      <br />
+      Invariably – неизменно/всегда
+    </p>
+
+    <h2>Пример задания 38.1</h2>
+    <p>
+      <span class="one-line">Клише подчеркнуты</span>
+      <br />
+      <br />
+      Imagine that you are doing a project on how Zetlanders spend leisure time
+      with their family most often. You have found some data on the subject -
+      the results of the opinion polls (see the table below).
+      <br />
+      <br />
+      Comment on the data in the table and give your opinion on the subject of
+      the project.
+      <br />
+      <br />
+      Opinion poll question: What is your favourite leisure time activity with
+      your family?
+    </p>
+
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/1AEk.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+
+    <p>
+      Write 200-250 words.
+      <br />
+      <br />
+      Use the following plan:
+      <br />
+      <br />
+      - make an opening statement on the subject of the project;
+      <br />
+      <br />
+      - select and report 2-3 facts;
+      <br />
+      <br />
+      - make 1-2 comparisons where relevant and give your comments;
+      <br />
+      <br />
+      - outline a problem that can arise with
+      <span class="one-line">family leisure time</span> and suggest a way of
+      solving it;
+      <br />
+      <br />
+      - conclude by giving and explaining your opinion
+      <span class="one-line"
+        >on the importance of spending leisure time with families</span
+      >.
+      <br />
+      <br />
+      <span class="one-line">It is common knowledge that</span> people spend
+      their free time with families in different ways.
+      <span class="one-line"
+        >The project I am currently working on is aimed at</span
+      >
+      finding out which family leisure time activities are the most popular
+      among the Zetlanders.
+      <span class="one-line"
+        >I have found a table, containing the results of the opinion polls,
+        which I am going to analyse and express my opinion on the matter</span
+      >.
+      <br />
+      <br />
+      <span class="one-line"
+        >According to the table, the majority of the respondents</span
+      >
+      (36%) cite walking in the open air, making it the most popular leisure
+      time activity among the Zetlanders.
+      <span class="one-line"
+        >The above-mentioned activity is closely followed by</span
+      >
+      doing sports (34%).
+      <span class="one-line"
+        >It is important to notice that the minority prefers</span
+      >
+      gardening (3%),
+      <span class="one-line"
+        >putting this activity at the bottom of the table</span
+      >.
+      <br />
+      <br />
+      <span class="one-line">The analysis of the data shows that</span> watching
+      films (20%) is
+      <span class="one-line">almost three times as popular</span> as visiting
+      museums (7%). <span class="one-line">This is probably because</span>
+      Zetlanders find watching films more entertaining and exciting than
+      visiting museums.
+      <br />
+      <br />
+      <span class="one-line">Though</span> leisure time with a family is casual
+      for most people,
+      <span class="one-line"
+        >there is a pressing problem that can arise with it</span
+      >. Many men and women are overloaded nowadays and find it difficult to
+      have enough time to spend it with their relatives.
+      <span class="one-line">Fortunately, this issue can be solved by</span>
+      taking regular holidays and rescheduling all of the plans connected with
+      jobs and studies.
+      <br />
+      <br />
+      <span class="one-line">In conclusion, I am convinced that</span> spending
+      family leisure time has <span class="one-line">invariably</span> been one
+      of the most important things in everyone's life as it makes relationships
+      stronger and unite all of the family members.
+      <br />
+      <br />
+      253 words
+    </p>
+
+    <h4>Пример задания 38.2</h4>
+    <p>
+      Imagine that you are doing a project on how Zetlanders spend leisure time
+      with their family most often. You have found some data on the subject -
+      the results of the opinion polls (see the pie chart below).
+      <br />
+      <br />
+      Comment on the data in the table and give your opinion on the subject of
+      the project.
+      <br />
+      <br />
+      Opinion poll question: What is your favourite leisure time activity with
+      your family?
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/1AFS.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <p>
+      Write 200-250 words.
+      <br />
+      <br />
+      Use the following plan:
+      <br />
+      <br />
+      - make an opening statement on the subject of the project;
+      <br />
+      <br />
+      - select and report 2-3 facts;
+      <br />
+      <br />
+      - make 1-2 comparisons where relevant and give your comments;
+      <br />
+      <br />
+      - outline a problem that can arise with
+      <span class="one-line">family leisure time</span> and suggest a way of
+      solving it;
+      <br />
+      <br />
+      - conclude by giving and explaining your opinion
+      <span class="one-line"
+        >on the importance of spending leisure time with families</span
+      >.
+      <br />
+      <br />
+      <span class="one-line">It is common knowledge that</span> people spend
+      their free time with families in different ways.
+      <span class="one-line"
+        >The project I am currently working on is aimed at</span
+      >
+      finding out which family leisure time activities are the most popular
+      among the Zetlanders.
+      <span class="one-line"
+        >I have found a pie chart, containing the results of the opinion polls,
+        which I am going to analyse and express my opinion on the matter</span
+      >.
+      <br />
+      <br />
+      <span class="one-line"
+        >According to the table, the majority of the respondents</span
+      >
+      (36%) cite walking in the open air, making it the most popular leisure
+      time activity among the Zetlanders.
+      <span class="one-line"
+        >The above-mentioned activity is closely followed by</span
+      >
+      doing sports (34%).
+      <span class="one-line"
+        >It is important to notice that the minority prefers</span
+      >
+      gardening (3%),
+      <span class="one-line"
+        >putting this activity at the bottom of the table</span
+      >.
+      <br />
+      <br />
+      <span class="one-line">The analysis of the data shows that</span> watching
+      films (20%) is
+      <span class="one-line">almost three times as popular</span> as visiting
+      museums (7%). <span class="one-line">This is probably because</span>
+      Zetlanders find watching films more entertaining and exciting than
+      visiting museums.
+      <br />
+      <br />
+      <span class="one-line">Though</span>leisure time with a family is casual
+      for most people,
+      <span class="one-line"
+        >there is a pressing problem that can arise with it</span
+      >. Many men and women are overloaded nowadays and find it difficult to
+      have enough time to spend it with their relatives.
+      <span class="one-line">Fortunately, this issue can be solved by</span>
+      taking regular holidays and rescheduling all of the plans connected with
+      jobs and studies.
+      <br />
+      <br />
+      <span class="one-line">In conclusion, I am convinced that</span> spending
+      family leisure time has <span class="one-line">invariably</span> been one
+      of the most important things in everyone's life as it makes relationships
+      stronger and unite all of the family members.
+      <br />
+      <br />
+      254 words
+    </p>
+
+    <div class="hint-modal" id="hint-1" onclick="closeHint('hint-1')">
+      <div class="hint-content">
+        <p>
+          Проще всего выбрать первый, второй и пятый пункт таблицы/диаграммы
+        </p>
+      </div>
+    </div>
+
+    <div id="modal" class="modal" onclick="closeModal()">
+      <img src="" id="modal-image" class="modal-content" alt="modal content" />
+    </div>
+
+    <script>
+      // открытие модального окна с тестом
+      function openTest(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+      }
+      // закрытие модального окна с тестом
+      function closeTest(modal) {
+        modal.style.display = "none";
+      }
+
+      // добавляет событие открытия модального окна для каждой кнопки
+      document.querySelectorAll(".open-test").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          openTest(modalId);
+        };
+      });
+
+      // после нажатия по кнопке, кнопка становится серой и это записывается в localstorage
+      function saveButtonStates() {
+        const states = [];
+        document.querySelectorAll(".open-test").forEach((button) => {
+          if (button.classList.contains("clicked")) {
+            states.push(button.id);
+          }
+        });
+        localStorage.setItem("clickedButtons", JSON.stringify(states));
+      }
+
+      // ддостает из localstorage закрашеные в серый кнопки
+      function restoreButtonStates() {
+        const savedStates =
+          JSON.parse(localStorage.getItem("clickedButtons")) || [];
+        savedStates.forEach((buttonId) => {
+          const button = document.getElementById(buttonId);
+          if (button) {
+            button.classList.add("clicked");
+          }
+        });
+      }
+
+      // добавляет событие проверки ответов! и покраски в другой цвет в случае не правильности
+      document.querySelectorAll(".check-answer").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          const answers = {
+            "modal-2": ["FIRST", "TWENTIETH"],
+          };
+
+          const correctAnswers = answers[modalId];
+          const inputs = document.querySelectorAll(`#${modalId} .input`);
+
+          inputs.forEach((input, index) => {
+            if (input.value.trim().toUpperCase() !== correctAnswers[index]) {
+              input.classList.add("incorrect");
+              input.classList.remove("correct");
+            } else {
+              input.classList.add("correct");
+              input.classList.remove("incorrect");
+            }
+          });
+
+          const openButton = document.querySelector(
+            `.open-test[data-modal="${modalId}"]`,
+          );
+          openButton.classList.add("clicked");
+          saveButtonStates();
+        };
+      });
+
+      // закрывает модальное окно если нажать мимо него
+      window.onclick = function (event) {
+        if (event.target.classList.contains("training-modal")) {
+          closeTest(event.target);
+        }
+      };
+
+      // открывает модальное окно с таблице svg
+      function openModal(imageElement) {
+        let modal = document.getElementById("modal");
+        let modalImg = document.getElementById("modal-image");
+
+        modal.style.display = "flex";
+        modalImg.src = imageElement.src;
+      }
+
+      // функция для закрытия модального окна с изображением таблицы svg
+      function closeModal() {
+        let modal = document.getElementById("modal");
+        modal.style.display = "none";
+      }
+
+      // функция для открытия модального окна с подсказкой
+      function openHint(hintId) {
+        document.getElementById(hintId).style.display = "flex";
+      }
+
+      // Функция для закрытия подсказки
+      function closeHint(hintId) {
+        document.getElementById(hintId).style.display = "none";
+      }
+
+      // Добавляем обработчик для каждого текста с подсказкой
+      document.querySelectorAll(".tooltip-text").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      // обработчик для совета по кнопочке
+      document.querySelectorAll(".question-mark").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      // достает закрашеные кнопки )
+      window.onload = restoreButtonStates;
+    </script>
+  </body>
+</html>

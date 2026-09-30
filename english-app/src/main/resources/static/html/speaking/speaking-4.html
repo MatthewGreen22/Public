@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Учебная страница по устной части</title>
+    <style>
+      ::selection {
+        background: #aeaeae;
+        color: #ffffff;
+      }
+      body {
+        -webkit-tap-highlight-color: rgba(17, 17, 17, 0.3);
+        font-family: "Poppins", sans-serif;
+        line-height: 1.5;
+        font-weight: 700;
+        margin: 15px;
+        background-color: #111111;
+        color: #ffffff;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      p {
+        margin-bottom: 10px;
+        color: #aeaeae;
+      }
+      strong {
+        font-weight: 800;
+      }
+      span {
+        line-height: 1.9;
+      }
+      button {
+        font-family: "Poppins", sans-serif;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #ff8000;
+        border-radius: 5px;
+        border: 0;
+        height: 35px;
+        width: 170px;
+        margin-top: 15px;
+        transition: all 150ms;
+      }
+      button:active {
+        opacity: 0.3;
+      }
+      button.clicked {
+        background-color: #363636;
+        color: #4e5053;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container img {
+        max-width: 100%;
+        cursor: pointer;
+      }
+      .modal {
+        justify-content: center;
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        overflow: auto;
+      }
+      .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 80%;
+      }
+      .highlight {
+        background-color: #ff8000;
+        color: #ffffff;
+        padding-right: 25px;
+        padding-left: 25px;
+        border-radius: 5px;
+      }
+      /*эти стили для подчеркивания*/
+      .input-line {
+        background-color: #111111;
+        padding-right: 75px;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .one-line {
+        border-bottom: 1px solid #ff8000;
+      }
+      .two-line {
+        position: relative;
+        border-bottom: 3px double #ff8000;
+      }
+      /*эти стили для подчеркивания*/
+      .training-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .training-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #333333;
+        margin: auto;
+        border-radius: 20px;
+        padding: 10px;
+        max-width: 90%;
+      }
+      .check-answer {
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+      .input {
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        margin-bottom: 1px;
+        font-weight: 700;
+        font-size: 16px;
+        width: 70px;
+        border: none;
+        outline: none;
+        color: #aeaeae;
+        background-color: #333333;
+        border-bottom: 1px solid #aeaeae;
+      }
+      .input.correct {
+        border-color: green;
+      }
+      .input.incorrect {
+        border-color: red;
+      }
+      .tooltip-text {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        color: #ff8000;
+        cursor: pointer;
+        transition: all 150ms;
+      }
+      .tooltip-text:active {
+        color: rgba(255, 128, 0, 0.31);
+      }
+      .hint-modal {
+        display: none;
+        justify-content: center;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .hint-content {
+        background-color: #333333;
+        color: #ffffff;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        max-height: 50%;
+        overflow-y: auto;
+        text-align: left;
+      }
+      .hint-content p {
+        margin-bottom: 16px;
+      }
+      .hint-content strong {
+        color: #ffffff;
+      }
+      .question-mark {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        transition: all 200ms;
+        right: 15px;
+        margin-top: 15px;
+        filter: drop-shadow(0 0 0.3rem #ff8000);
+      }
+      .question-mark:active {
+        filter: drop-shadow(0 0 0.5rem #ff8000);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      Задание 4 <br />
+      Алгоритм работы
+    </h1>
+
+    <p>
+      <strong
+        >Task 4. Imagine that you and your friend are doing a school project
+        “Sports activities”. You have found some photos to illustrate it but for
+        technical reasons you cannot send them now. Leave a voice message to
+        your friend explaining your choice of the photos and sharing some ideas
+        about the project. In 2.5 minutes be ready to:
+      </strong>
+      <br />
+      <br />
+      • explain the choice of the illustrations for the project by briefly
+      describing them and noting the differences;
+      <br />
+      <br />
+      • mention the advantages (1–2) of the two sports activities;
+      <br />
+      <br />
+      • mention the disadvantages (1–2) of the two sports activities;
+      <br />
+      <br />
+      • express your opinion on the subject of the project – which of the sports
+      activities presented in the pictures you’d prefer and why.
+      <br />
+      <br />
+      <strong
+        >You will speak for not more than 3 minutes (12–15 sentences). You have
+        to talk continuously.</strong
+      >
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/1ABw.svg"
+        alt="table"
+        onclick="openModal(this)"
+      />
+    </div>
+    <p>
+      <strong>От тебя требуется</strong>
+      <br />
+      <br />
+      • Объяснить выбор фотографий
+      <br />
+      <br />
+      • Коротко их описать
+      <br />
+      <br />
+      • Обозначить различия между ними
+      <br />
+      <br />
+      • Упомянуть преимущества двух видов спорта
+      <br />
+      <br />
+      • Упомянуть недостатки двух видов спорта
+      <br />
+      <br />
+      • Выразить свое мнение, какой из представленных на фотографиях видов
+      спорта ты бы предпочел/предпочла и почему
+      <br />
+      <br />
+      У тебя есть две с половиной минуты на подготовку и три минуты на ответ.
+      При ответе сказать НЕ меньше 12-ти предложений
+      <br />
+      <br />
+      <span class="one-line"
+        >Подчеркиванием обозначены клише, которые нужно просто запомнить</span
+      >
+      <br />
+      <br />
+      Это задание повышенной сложности, поэтому тебе нужно показать знание
+      сложных грамматических конструкций
+    </p>
+
+    <p>
+      1. Обрати внимание на название проекта – в нашем случае “Sports
+      activities”
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19ov.svg"
+        alt="question-mark"
+        class="question-mark"
+        data-hint="hint-1"
+      />
+    </div>
+    <p>
+      2. Начинай с одного и того же вступления
+      <br />
+      <br />
+      <span class="one-line"
+        >“Hello, «имя твоего друга»! Guess what! I've just found two photos for
+        our project</span
+      >
+      "Sports activities"
+      <span class="one-line">and I'd like to discuss them with you.” </span>
+      <br />
+      <br />
+      3. Переходи к описанию первой фотографии
+      <br />
+      Можно выразить предположение, потому что ты не знаешь наверняка –
+      <span class="one-line">“In the first picture there is a</span> man playing
+      football. <span class="one-line">Probably</span>, he is training.”
+      <br />
+      <br />
+      4. Опиши вторую фотографию
+      <br />
+      Также можно добавить предположение –
+      <span class="one-line"
+        >“In the second picture, there is a girl in a swimming pool.</span
+      >
+      She <span class="one-line">might be</span> training as well.”
+      <br />
+      <br />
+      5. Объясняем выбор фотографий
+      <br />
+      В нашем случае
+      <span class="one-line"
+        >“The photos are really suitable for the project as they illustrate
+        contrasting types of</span
+      >
+      sports activities.”
+      <br />
+      <br />
+      6. Переход к различиям
+      <br />
+      В нашем случае нужно указать различия в видах спорта – team/ individual
+      sport; indoor/ outdoor sport;
+      <span class="one-line"
+        >“Though the photos have something in common, there are some differences
+        between them. To begin with, in the first photo the</span
+      >
+      man is doing an outdoor sports activity
+      <span class="one-line">contrary to the</span> girl
+      <span class="one-line">in the second picture</span> – she’s indoors”
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19ov.svg"
+        alt="question-mark"
+        class="question-mark"
+        data-hint="hint-2"
+      />
+    </div>
+    <p>
+      7. Второе различие
+      <br />
+      <span class="one-line">“Moreover, there are two types of</span> sports
+      activities. <span class="one-line">The first photo shows</span> a team
+      sport <span class="one-line">while the other photo shows</span> an
+      individual sport.”
+      <br />
+      <br />
+      8. Рассказать про преимущества
+      <br />
+      <span class="one-line">“You know, these types of</span> sports activities
+      <span class="one-line">have some advantages</span>. Team sports develop
+      your communication skills. <span class="one-line">However</span>, in
+      individual sports you don’t depend on anyone, so no one can let you down.”
+      <br />
+      <br />
+      9. Рассказать про недостатки
+      <br />
+      <span class="one-line"> “As for the disadvantages of the types of</span>
+      sports activities <span class="one-line">mentioned before</span>, team
+      sports often involve quarrels and argues.
+      <span class="one-line">As for</span> individual sports, you can’t rely on
+      anyone but yourself.”
+      <br />
+      <br />
+      10. Выразить свое мнение
+      <br />
+      <span class="one-line">“If you ask me, I</span> would prefer football.
+      <span class="one-line">You know</span>, I’m keen on team sports.
+      <span class="one-line">It gives me the opportunity to</span> interact with
+      my teammates and go for the win all together.”
+    </p>
+    <div class="container">
+      <img
+        src="https://svgshare.com/i/19ov.svg"
+        alt="question-mark"
+        class="question-mark"
+        data-hint="hint-3"
+      />
+    </div>
+    <p>
+      11. Заключение
+      <br />
+      <span class="one-line"
+        >“That's all I've been meaning to say on the matter. I hope you like the
+        photos. Bye.”</span
+      >
+    </p>
+
+    <p>
+      Пример ответа:
+      <br />
+      <br />
+      • “Hello, Ben! Guess what! I've just found two photos for our project
+      "Sports activities" and I'd like to discuss them with you.
+      <br />
+      <br />
+      • In the first picture there is a man playing football. Probably, he is
+      training. In the second picture, there is a girl in a swimming pool. She
+      might be training as well.
+      <br />
+      <br />
+      • The photos are really suitable for the project as they illustrate
+      contrasting types of sports activities.
+      <br />
+      <br />
+      • Though the photos have something in common, there are some differences
+      between them. To begin with, in the first photo the man is doing an
+      outdoor sports activity contrary to the girl in the second picture – she’s
+      indoors. Moreover, there are two types of sports activities. The first
+      photo shows a team sport while the other photo shows an individual sport.
+      <br />
+      <br />
+      • You know, these types of sports activities have some advantages. Team
+      sports develop your communication skills. However, in individual sports
+      you don’t depend on anyone, so no one can let you down.
+      <br />
+      <br />
+      • As for the disadvantages of the types of sports activities mentioned
+      before, team sports often involve quarrels and argues. As for individual
+      sports, you can’t rely on anyone but yourself.
+      <br />
+      <br />
+      • If you ask me, I would prefer football. You know, I’m keen on team
+      sports. It gives me the opportunity to interact with my teammates and go
+      for the win all together.
+      <br />
+      <br />
+      • That's all I've been meaning to say on the matter. I hope you like the
+      photos. Bye.
+    </p>
+
+    <div class="hint-modal" id="hint-1" onclick="closeHint('hint-1')">
+      <div class="hint-content">
+        <p>
+          <strong>Никаких</strong> You can see/we can see…
+          <br />
+          <br />
+          <strong>Используй слова логической связи</strong> – however, on the
+          one hand … on the other hand…, as for…, speaking of…
+        </p>
+      </div>
+    </div>
+
+    <div class="hint-modal" id="hint-2" onclick="closeHint('hint-2')">
+      <div class="hint-content">
+        <p>
+          <strong>Различия должны касаться темы проекта.</strong> Не нужно
+          сравнивать, например, цвета футболок и мебели
+        </p>
+      </div>
+    </div>
+
+    <div class="hint-modal" id="hint-3" onclick="closeHint('hint-3')">
+      <div class="hint-content">
+        <p>
+          Очень важно отвечать в соответствии с последним пунктом – в нашем
+          случае тебе нужно сказать, какой из видов спорта на фото ты бы
+          предпочел/предпочла и почему
+          <br />
+          <br />
+          Если в последнем пункте “you’d prefer” – отвечаем “I would prefer”;
+          <br />
+          если “prefer” – “I prefer”;
+          <br />
+          если “preferred as a child” – отвечаем “when I was a child, I
+          preferred…”;
+          <br />
+          если “would like” – отвечаем “I would like”;
+          <br />
+          если “would enjoy” – “I would enjoy”;
+          <br />
+          “whether you believe using a boat is better or not.” – “I believe
+          using a boat is/isn’t better…
+        </p>
+      </div>
+    </div>
+
+    <div id="modal" class="modal" onclick="closeModal()">
+      <img src="" id="modal-image" class="modal-content" alt="modal content" />
+    </div>
+
+    <script>
+      // открытие модального окна с тестом
+      function openTest(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+      }
+      // закрытие модального окна с тестом
+      function closeTest(modal) {
+        modal.style.display = "none";
+      }
+
+      // добавляет событие открытия модального окна для каждой кнопки
+      document.querySelectorAll(".open-test").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          openTest(modalId);
+        };
+      });
+
+      // после нажатия по кнопке, кнопка становится серой и это записывается в localstorage
+      function saveButtonStates() {
+        const states = [];
+        document.querySelectorAll(".open-test").forEach((button) => {
+          if (button.classList.contains("clicked")) {
+            states.push(button.id);
+          }
+        });
+        localStorage.setItem("clickedButtons", JSON.stringify(states));
+      }
+
+      // ддостает из localstorage закрашеные в серый кнопки
+      function restoreButtonStates() {
+        const savedStates =
+          JSON.parse(localStorage.getItem("clickedButtons")) || [];
+        savedStates.forEach((buttonId) => {
+          const button = document.getElementById(buttonId);
+          if (button) {
+            button.classList.add("clicked");
+          }
+        });
+      }
+
+      // добавляет событие проверки ответов! и покраски в другой цвет в случае не правильности
+      document.querySelectorAll(".check-answer").forEach((button) => {
+        button.onclick = function () {
+          const modalId = this.getAttribute("data-modal");
+          const answers = {
+            "modal-2": ["FIRST", "TWENTIETH"],
+          };
+
+          const correctAnswers = answers[modalId];
+          const inputs = document.querySelectorAll(`#${modalId} .input`);
+
+          inputs.forEach((input, index) => {
+            if (input.value.trim().toUpperCase() !== correctAnswers[index]) {
+              input.classList.add("incorrect");
+              input.classList.remove("correct");
+            } else {
+              input.classList.add("correct");
+              input.classList.remove("incorrect");
+            }
+          });
+
+          const openButton = document.querySelector(
+            `.open-test[data-modal="${modalId}"]`,
+          );
+          openButton.classList.add("clicked");
+          saveButtonStates();
+        };
+      });
+
+      // закрывает модальное окно если нажать мимо него
+      window.onclick = function (event) {
+        if (event.target.classList.contains("training-modal")) {
+          closeTest(event.target);
+        }
+      };
+
+      // открывает модальное окно с таблице svg
+      function openModal(imageElement) {
+        let modal = document.getElementById("modal");
+        let modalImg = document.getElementById("modal-image");
+
+        modal.style.display = "flex";
+        modalImg.src = imageElement.src;
+      }
+
+      // функция для закрытия модального окна с изображением таблицы svg
+      function closeModal() {
+        let modal = document.getElementById("modal");
+        modal.style.display = "none";
+      }
+
+      // функция для открытия модального окна с подсказкой
+      function openHint(hintId) {
+        document.getElementById(hintId).style.display = "flex";
+      }
+
+      // Функция для закрытия подсказки
+      function closeHint(hintId) {
+        document.getElementById(hintId).style.display = "none";
+      }
+
+      // Добавляем обработчик для каждого текста с подсказкой
+      document.querySelectorAll(".tooltip-text").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      // обработчик для совета по кнопочке
+      document.querySelectorAll(".question-mark").forEach((item) => {
+        item.addEventListener("click", () => {
+          const hintId = item.getAttribute("data-hint");
+          openHint(hintId);
+        });
+      });
+
+      // достает закрашеные кнопки )
+      window.onload = restoreButtonStates;
+    </script>
+  </body>
+</html>
